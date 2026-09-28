@@ -1,11 +1,15 @@
 [package]
-name = "rtc"
-version = "0.1.2"
+name = "textui-calculator"
+version = "0.2.0"
 edition = "2024"
 description = "Rust Text Calculator"
 readme = "README.md"
-repository = "https://github.com/kda/rtc"
+repository = "https://github.com/kda/2ec"
 license-file = "LICENSE"
+
+[[bin]]
+name = "2ec"
+path = "src/main.rs"
 
 [dependencies]
 clap = { version = "4.6.7", features = ["derive"] }

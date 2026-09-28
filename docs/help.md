@@ -205,7 +205,7 @@ Work in scientific mode.
 ## V
 Version     (V)
 
-Show Version information about RTC.
+Show version Information.
 
 ## hat
 Bit-wise Xor   (^)

@@ -853,7 +853,7 @@ struct Args {
     config: Option<String>,
     #[arg(short, long)]
     debug: bool,
-    #[arg(short, long, default_value="rtc_debug.log")]
+    #[arg(short, long, default_value="2ec_debug.log")]
     logfile: String,
 }
 
@@ -1372,12 +1372,12 @@ impl Widget for &App {
             },
             Mode::ShowVersion => {
                 let mut text = Text::default();
-                text.push_line(Line::from("RTC").centered());
-                text.push_line(Line::from("Rust Text Calculator").centered());
+                text.push_line(Line::from("2EC").centered());
+                text.push_line(Line::from("Text UI Calculator").centered());
                 text.push_line(
                     Line::from(format!("Version {}", env!("CARGO_PKG_VERSION"))).centered());
                 text.push_line(Line::from("").centered());
-                text.push_line(Line::from("https://github.com/kda/rtc").centered());
+                text.push_line(Line::from("https://github.com/kda/2ec").centered());
                 text.render(location, buf);
             },
         }
@@ -1571,7 +1571,7 @@ mod tests {
         writeln!(file, "{}", config_content)?;
 
         let args = vec![
-            "rtc".into(),
+            "2ec".into(),
             "-c".into(),
             file.path().as_os_str().to_os_string(),
         ];

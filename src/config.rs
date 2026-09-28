@@ -43,7 +43,7 @@ impl Config {
         }
     }
 
-    const DEFAULT_FILENAME: &str = ".rtc.yaml";
+    const DEFAULT_FILENAME: &str = ".2ec.yaml";
 
     fn find_file() -> Option<String> {
         // First: find it in the current working directory
