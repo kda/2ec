@@ -2,7 +2,7 @@
 name = "textui-calculator"
 version = "0.2.0"
 edition = "2024"
-description = "Rust Text Calculator"
+description = "Text-UI Calculator"
 readme = "README.md"
 repository = "https://github.com/kda/2ec"
 license-file = "LICENSE"

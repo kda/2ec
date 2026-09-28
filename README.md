@@ -1,11 +1,21 @@
 # 2ec
 Text UI Calculator
 
-A text-based calculator written in Rust.
+A text-oriented calculator for the terminal.
 
 [![Rust](https://github.com/kda/2ec/actions/workflows/rust.yml/badge.svg)](https://github.com/kda/2ec/actions/workflows/rust.yml)
 [![Windows](https://github.com/kda/2ec/actions/workflows/rust_on_windows.yml/badge.svg)](https://github.com/kda/2ec/actions/workflows/rust_on_windows.yml)
 [![MacOS](https://github.com/kda/2ec/actions/workflows/rust_on_macos.yml/badge.svg)](https://github.com/kda/2ec/actions/workflows/rust_on_macos.yml)
+
+# Features (completed)
+-   Support for different bases: 2, 8, 10, 16
+-   Support for different numeric mdoes: whole number (integer, no decimals), decimal (3.14), scientific (2.03e+4)
+-   Basic math operations: add, subtract, multiply, divide, remainder (modulo)
+-   Bit operations: AND, OR, XOR, XNOR, invert, left/right shift
+-   10 memory locations, to recall the results of previous calculations.
+-   Pre-loaded constants.
+-   Customizable constants via config file.
+-   Built in help system to show how each key works.
 
 # todo
 ## features
@@ -48,6 +58,8 @@ A text-based calculator written in Rust.
 -   display commas (modal, also consider EURO style (.  <-> ,))
 -   display memory registers
 -   confirm quit request
+## docs
+-   configuration file with examples
 
 ## discarded attempts
 -   BigText Result: cargo add ratatui tui-big-text
@@ -60,3 +72,5 @@ A text-based calculator written in Rust.
 -   Insta Review
     -   `cargo install cargo-insta`
     -   `cargo insta review`
+-   Install
+    -   `cargo install --path .`

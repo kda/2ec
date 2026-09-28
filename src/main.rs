@@ -847,7 +847,7 @@ struct App {
 }
 
 #[derive(Parser, Debug)]
-#[command(author, version, about, long_about = None)]
+#[command(author, version, about, long_about = None, name = "2ec")]
 struct Args {
     #[arg(short, long)]
     config: Option<String>,
