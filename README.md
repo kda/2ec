@@ -17,7 +17,7 @@ A text-oriented calculator for the terminal.
 -   Customizable constants via config file.
 -   Built in help system to show how each key works.
 
-![Demo Animation](src/snapshots/rust_ui_comparison.png)
+![Demo Animation](src/snapshots/demo_animation.png)
 
 # What's in a name?
 The name evolved and here are some of the things that played into it.
