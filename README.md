@@ -17,7 +17,7 @@ A text-oriented calculator for the terminal.
 -   Customizable constants via config file.
 -   Built in help system to show how each key works.
 
-# What is in a name?
+# What's in a name?
 The name evolved and here are some of the things that played into it.
 -   It was the boring **RTC**: Rust Text Calculator.
 -   Then I found the rust crate called [rtc](https://webrtc.rs).
@@ -43,6 +43,9 @@ The name evolved and here are some of the things that played into it.
         - It is very good, but sorely needed to be modernized, IMHO.
         - Which leads us to the next point...
 -   2E may refer to a "2nd Edition".  This may be thought of as a second edition of **calctool**.
+
+# Why?
+I wanted to have a little project to start sharpening my new Rust skills on.  AND see [What's in a name?](#whats-in-a-name)
 
 # todo
 ## features
