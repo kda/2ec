@@ -1131,7 +1131,7 @@ impl App {
         text.render(location, buf);
     }
 
-    fn render_keypad_content(&self, _area: Rect, buf: &mut Buffer, content: &String) {
+    fn render_keypad_content(&self, _area: Rect, buf: &mut Buffer, title: &str, content: &String) {
         let location = Rect{
             x: KEYPAD_X + 1,
             y: KEYPAD_Y + 1,
@@ -1139,15 +1139,18 @@ impl App {
             height: KEYPAD_HEIGHT - 4,
         };
         let mut text = Text::default();
+        if ! title.is_empty() {
+            let title_line = Line::from(title);
+            text.push_line(title_line.centered());
+            text.push_line(Line::default());
+        }
         for content_line in content.split('\n') {
             if content_line.len() > location.width as usize {
                 let indent = content_line.starts_with('-');
-                //let mut second_line = false;
                 let mut line = Line::default();
                 for word in content_line.split(' ') {
                     if line.width() + 1 + word.len() > location.width as usize {
                         text.push_line(line);
-                        //second_line = true;
                         line = Line::raw("");
                         if indent {
                             line.push_span(" ");
@@ -1339,7 +1342,7 @@ impl Widget for &App {
                 }
                 lines.sort();
                 let content = lines.join("\n");
-                self.render_keypad_content(area, buf, &content);
+                self.render_keypad_content(area, buf, "select a constant", &content);
             }
             Mode::MemoryStore => {
                 self.render_digits_keypad(area, buf, "location to store value");
@@ -1362,10 +1365,10 @@ impl Widget for &App {
                 }
                 keys.sort();
                 let content = keys.join(" ");
-                self.render_keypad_content(area, buf, &content);
+                self.render_keypad_content(area, buf, "select key to get help with", &content);
             },
             Mode::ShowHelp => {
-                self.render_keypad_content(area, buf, &self.help_content);
+                self.render_keypad_content(area, buf, "help", &self.help_content);
             },
             Mode::ShowError => {
                 // nothing to show on keypad

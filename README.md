@@ -92,6 +92,7 @@ I wanted to have a little project to start sharpening my new Rust skills on.  AN
 -   confirm quit request
 ## docs
 -   configuration file with examples
+-   update animation to show a simple walkthrough of different functionality
 
 ## discarded attempts
 -   BigText Result: cargo add ratatui tui-big-text
