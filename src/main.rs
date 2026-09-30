@@ -1,6 +1,6 @@
 use clap::Parser;
 use crossterm::event::{self, Event, KeyCode, KeyEvent, KeyEventKind};
-use log::{debug, info, trace};
+use log::{debug, trace};
 use ratatui::buffer::Buffer;
 use ratatui::layout::Rect;
 use ratatui::prelude::{Line, Position, Size, Text};
@@ -557,12 +557,50 @@ const KEYS_MAPPING: LazyLock<HashMap<KeyCode, KeyEntry>> = LazyLock::new(|| {
                 ..Default::default()
             }
         ),
+        (KeyCode::Char('T'),
+            KeyEntry {
+                mode_op: HashMap::from([
+                    (Mode::Calculating, (|app| {
+                        if app.calculator.get_numeric_mode() == NumericMode::Integer {
+                            return;
+                        }
+                        app.calculator.set_pending_operation(Operation::FractionalPortion);
+                        if let Err(_) = app.calculator.update_value() {
+                            app.mode = Mode::ShowError;
+                        }
+                    }) as KeyOperation),
+                ]),
+                help_heading: "T",
+                ..Default::default()
+            }
+        ),
         (KeyCode::Char('V'),
             KeyEntry {
                 mode_op: HashMap::from([
                     (Mode::Calculating, (|app| { app.mode = Mode::ShowVersion; }) as KeyOperation),
                 ]),
                 help_heading: "V",
+                ..Default::default()
+            }
+        ),
+        (KeyCode::Char('W'),
+            KeyEntry {
+                mode_op: HashMap::from([
+                    (Mode::Calculating, (|app| {
+                        debug!("received W");
+                        if app.calculator.get_numeric_mode() == NumericMode::Integer {
+                            trace!("received W: noop in Integer mode");
+                            return;
+                        }
+                        debug!("received W: not integer");
+                        app.calculator.set_pending_operation(Operation::IntegerPortion);
+                        if let Err(_) = app.calculator.update_value() {
+                            app.mode = Mode::ShowError;
+                        }
+                        debug!("received W: new value {:?}", app.calculator.state.get_value());
+                    }) as KeyOperation),
+                ]),
+                help_heading: "W",
                 ..Default::default()
             }
         ),
@@ -799,6 +837,8 @@ const OPERATION_NAMES: LazyLock<HashMap<Operation, &str>> = LazyLock::new(|| {
         (Operation::Invert, "~"),
         (Operation::LeftShift, "<"),
         (Operation::RightShift, ">"),
+        (Operation::IntegerPortion, "W"),
+        (Operation::FractionalPortion, "T"),
     ])
 });
 
@@ -1368,7 +1408,7 @@ impl Widget for &App {
                 self.render_keypad_content(area, buf, "select key to get help with", &content);
             },
             Mode::ShowHelp => {
-                self.render_keypad_content(area, buf, "help", &self.help_content);
+                self.render_keypad_content(area, buf, "", &self.help_content);
             },
             Mode::ShowError => {
                 // nothing to show on keypad
@@ -1442,6 +1482,7 @@ mod tests {
     use super::*;
     use crossterm::event::{KeyCode, KeyEvent, KeyModifiers};
     use insta::assert_snapshot;
+    use log::info;
     use ratatui::{backend::TestBackend, Terminal};
     use std::ffi::OsString;
     use std::io::Write;

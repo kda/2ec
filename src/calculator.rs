@@ -1,3 +1,4 @@
+use log::debug;
 use strum_macros::EnumIter;
 
 #[derive(Clone, Copy, Debug, EnumIter, Eq, Hash, PartialEq)]
@@ -14,6 +15,8 @@ pub enum Operation {
     Invert,
     Xor,
     Xnor,
+    IntegerPortion,
+    FractionalPortion,
 }
 
 #[derive(Clone, Copy, Debug, Eq, Hash, PartialEq)]
@@ -77,6 +80,7 @@ impl Calculator {
     }
 
     pub fn update_value(&mut self) -> Result<(), Error> {
+        debug!("update_value");
         if let Some(value) = self.state.accumulator {
             if let Some(operation) = &self.state.pending_operation {
                 match operation {
@@ -119,6 +123,12 @@ impl Calculator {
                     }
                     Operation::Invert => {
                     }
+                    Operation::IntegerPortion => {
+                        self.state.value = self.state.value.trunc()
+                    }
+                    Operation::FractionalPortion => {
+                        self.state.value = self.state.value.fract()
+                    }
                 }
             } else {
                 self.state.value = value;
@@ -132,6 +142,12 @@ impl Calculator {
                 match operation {
                     Operation::Invert => {
                         self.state.value = !self.state.value;
+                    }
+                    Operation::IntegerPortion => {
+                        self.state.value = self.state.value.trunc()
+                    }
+                    Operation::FractionalPortion => {
+                        self.state.value = self.state.value.fract()
                     }
                     _ => {}
                 }
@@ -205,6 +221,21 @@ impl ValuePair {
     }
     pub fn get_numeric_mode(&self) -> NumericMode {
         self.numeric_mode
+    }
+    pub fn fract(&mut self) -> Self {
+        if self.numeric_mode != NumericMode::Integer {
+            self.set_decimal(self.get_decimal().fract());
+        }
+        *self
+    }
+    pub fn trunc(& self) -> Self {
+        let mut retval = *self;
+        debug!("*self: {:?}", *self);
+        debug!("retval: {:?}", retval);
+        if retval.numeric_mode != NumericMode::Integer {
+            retval.set_decimal(self.get_decimal().trunc());
+        }
+        retval
     }
 }
 

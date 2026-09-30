@@ -46,7 +46,7 @@ Bit-wise And    (&)
 
 Apply the AND operator.
 
-Only works in integer (wholenumber) mode.
+Only works in (I)nteger (whole number) mode.
 
 ## asterisk
 Multiply    (*)
@@ -128,7 +128,7 @@ Left Shift  (<)
 
 Shift the bits left.
 
-Only works in integer (wholenumber) mode.
+Only works in (I)nteger (whole number) mode.
 
 ## equals
 Equals      (=)
@@ -140,7 +140,7 @@ Right Shift (>)
 
 Shift the bits right.
 
-Only works in integer (wholenumber) mode.
+Only works in (I)nteger (whole number) mode.
 
 ## bing
 Help    (?)
@@ -173,7 +173,7 @@ Exponent    (E)
 Beginning enter the exponent part of the scientific number.  (Requires being in the scientific numeric mode (S).)
 
 ## F
-Significant Digits  (F)
+Significant Figures     (F)
 
 Set the number of significant digits (0-9).
 
@@ -188,7 +188,7 @@ Integer     (I)
 Work in integer (whole numbers) mode.
 
 ## M
-Memory  (M)
+(M)emory  (M)
 
 Show (or hide) memory registers.
 
@@ -202,17 +202,31 @@ Scientific  (S)
 
 Work in scientific mode.
 
+## T
+Frac(T)ion  (T)
+
+Trim off the fractional portion.  Retain the integer (whole number) portion.  Keep everything on the left of the decimal.
+
+Non-operation in Integer (Whole Number) Mode.
+
 ## V
 Version     (V)
 
 Show version Information.
+
+## W
+Retain the integer ((W)hole number) portion     (W)
+
+Trim off the fractional portion.  Retain the integer (whole number) portion.
+
+Non-operation in (I)nteger (whole number) mode.
 
 ## hat
 Bit-wise Xor   (^)
 
 Apply the XOR operator.
 
-Only works in integer (wholenumber) mode.
+Only works in (I)nteger (whole number) mode.
 
 ## a
 a (base-16) (a)
@@ -249,7 +263,7 @@ Bit-wise Xnor    (n)
 
 Apply the Xnor operator.
 
-Only works in integer (wholenumber) mode.
+Only works in (I)nteger (whole number) mode.
 
 ## q
 Quit    (q)
@@ -271,11 +285,11 @@ Bit-wise Or     (|)
 
 Apply the AND operator.
 
-Only works in integer (wholenumber) mode.
+Only works in (I)nteger (whole number) mode.
 
 ## tilde
 Invert      (~)
 
 Invert the bits of the current value.
 
-Only works in integer (wholenumber) mode.
+Only works in (I)nteger (whole number) mode.
