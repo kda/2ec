@@ -1355,7 +1355,7 @@ impl Widget for &App {
 
                 // memory
                 line = Line::default();
-                line.push_span("mem: ".dim());
+                line.push_span(" mem: ".dim());
                 line.spans.extend(self.highlight_letter_at("store", 0).spans);
                 line.push_span(" ");
                 line.spans.extend(self.highlight_letter_at("recall", 0).spans);
@@ -1363,7 +1363,7 @@ impl Widget for &App {
 
                 // Numeric Base
                 line = Line::default();
-                line.push_span("base =>".dim());
+                line.push_span("base:".dim());
                 for base in calculator::NumericBase::iter() {
                     if base != self.calculator.state.get_numeric_base() {
                         let key = NUMERIC_BASE_KEYS[&base];
@@ -1385,7 +1385,7 @@ impl Widget for &App {
 
                 // Numeric Mode
                 line = Line::default();
-                line.push_span("mode =>".dim());
+                line.push_span("mode:".dim());
                 for mode in calculator::NumericMode::iter() {
                     if mode != self.calculator.get_numeric_mode() {
                         let key = NUMERIC_MODE_KEYS[&mode];
