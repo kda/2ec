@@ -52,8 +52,10 @@ I wanted to have a little project to start sharpening my new Rust skills on.  AN
 # todo
 ## features
 -   calc
-    -   trunc
-    -   frac
+    -   bit ops: 16 bit, 32 bit
+    -   powers: e^x, 10^x, y^x, x^x
+    -   special: sqrt, ln, log, invert fraction, factorial
+    -   trigonometry
 - 	add color (if terminal capable and/or if flag)
 - 	check terminal size at startup for available space (exit gracefully if insufficient.)
 -   display commas (modal, also consider EURO style (.  <-> ,)) (possibly detect based on locale?)

@@ -3,7 +3,7 @@ use crossterm::event::{self, Event, KeyCode, KeyEvent, KeyEventKind};
 use log::{debug, trace};
 use ratatui::buffer::Buffer;
 use ratatui::layout::Rect;
-use ratatui::prelude::{Line, Position, Size, Text};
+use ratatui::prelude::{Line, Modifier, Position, Size, Span, Style, Stylize, Text};
 use ratatui::widgets::{Block, BorderType, Widget};
 use ratatui::{DefaultTerminal, Frame};
 use simplelog::{Config, LevelFilter, WriteLogger};
@@ -398,7 +398,7 @@ const KEYS_MAPPING: LazyLock<HashMap<KeyCode, KeyEntry>> = LazyLock::new(|| {
                     }) as KeyOperation),
                 ]),
                 help_heading: "A",
-                hint: "dec",
+                hint: "decimAl",
                 ..Default::default()
             }
         ),
@@ -518,7 +518,7 @@ const KEYS_MAPPING: LazyLock<HashMap<KeyCode, KeyEntry>> = LazyLock::new(|| {
                     }) as KeyOperation),
                 ]),
                 help_heading: "I",
-                hint: "int",
+                hint: "Int",
                 ..Default::default()
             }
         ),
@@ -553,7 +553,7 @@ const KEYS_MAPPING: LazyLock<HashMap<KeyCode, KeyEntry>> = LazyLock::new(|| {
                     }) as KeyOperation),
                 ]),
                 help_heading: "S",
-                hint: "sci",
+                hint: "Sci",
                 ..Default::default()
             }
         ),
@@ -1223,6 +1223,22 @@ impl App {
             self.constants.insert(KeyCode::Char(key.chars().nth(0).expect("empty key name")), ce);
         }
     }
+
+    fn highlight_letter_at(&self, text: &str, index: usize) -> Line<'_> {
+        let spans: Vec<Span> = text
+            .chars()
+            .enumerate()
+            .map(|(i, ch)| {
+                if i == index {
+                    Span::raw(ch.to_string())
+                } else {
+                    Span::styled(ch.to_string(), Style::default().add_modifier(Modifier::DIM))
+                }
+            })
+            .collect();
+
+        Line::from(spans)
+    }
 }
 
 const DISPLAY_X: u16 = 0;
@@ -1335,14 +1351,31 @@ impl Widget for &App {
                 }
                 text.push_line(line.centered());
 
+                // number manipulation
+
+                // memory
+                line = Line::default();
+                line.push_span("mem: ".dim());
+                line.spans.extend(self.highlight_letter_at("store", 0).spans);
+                line.push_span(" ");
+                line.spans.extend(self.highlight_letter_at("recall", 0).spans);
+                text.push_line(line.left_aligned());
+
                 // Numeric Base
                 line = Line::default();
-                line.push_span("base =>");
+                line.push_span("base =>".dim());
                 for base in calculator::NumericBase::iter() {
                     if base != self.calculator.state.get_numeric_base() {
                         let key = NUMERIC_BASE_KEYS[&base];
                         if let Some(ke) = KEYS_MAPPING.get(&KeyCode::Char(key)) {
-                            line.push_span(format!(" {}:{}", key, ke.hint));
+                            line.push_span(" ");
+                            if let Some(index) = ke.hint.find(key) {
+                                line.spans.extend(self.highlight_letter_at(ke.hint, index));
+                            } else {
+                                line.push_span(key.to_string());
+                                line.push_span(':'.dim());
+                                line.push_span(ke.hint.dim());
+                            }
                         } else {
                             panic!("unable to locate KeyEntry for =>{}<=", key);
                         };
@@ -1352,19 +1385,26 @@ impl Widget for &App {
 
                 // Numeric Mode
                 line = Line::default();
-                line.push_span("mode =>");
+                line.push_span("mode =>".dim());
                 for mode in calculator::NumericMode::iter() {
                     if mode != self.calculator.get_numeric_mode() {
                         let key = NUMERIC_MODE_KEYS[&mode];
                         if let Some(ke) = KEYS_MAPPING.get(&KeyCode::Char(key)) {
-                            line.push_span(format!(" {}:{}", key, ke.hint));
+                            line.push_span(" ");
+                            if let Some(index) = ke.hint.find(key) {
+                                line.spans.extend(self.highlight_letter_at(ke.hint, index));
+                            } else {
+                                line.push_span(key.to_string());
+                                line.push_span(':'.dim());
+                                line.push_span(ke.hint.dim());
+                            }
                         } else {
                             panic!("unable to locate KeyEntry for =>{}<=", key);
                         };
                     }
                 }
                 if self.calculator.get_numeric_mode() != NumericMode::Integer {
-                    line.push_span(" F:sigdig");
+                    line.spans.extend(self.highlight_letter_at(" sigFig", 4).spans);
                 }
                 text.push_line(line.left_aligned());
                 text.render(location, buf);
@@ -1427,16 +1467,32 @@ impl Widget for &App {
 
         // Nearly Always present
         if self.mode != Mode::AskingHelp {
+
             let mut text = Text::default();
             let mut line = Line::default();
-            const WIDTH: usize = 11;
-            line.push_span(format!("{:<1$}", "ESC: clear", WIDTH));
-            line.push_span(format!("{:^1$}", "?: help", WIDTH));
-            line.push_span(format!("{:>1$}", "q: quit", WIDTH));
-            text.push_line(line.centered());
-
+            //const WIDTH: usize = 11;
+            //line.push_span(format!("{:<1$}", "ESC: clear", WIDTH));
+            line.push_span("?");
+            line.push_span(" help".dim());
+            text.push_line(line.left_aligned());
             location.height = text.height() as u16;
             location.y = DISPLAY_HEIGHT + KEYPAD_HEIGHT - location.height - 1;
+            text.render(location, buf);
+            //line.push_span(format!("{:^1$}", "?: help", WIDTH));
+            //piece = Line::default();
+            text = Text::default();
+            line = Line::default();
+            line.push_span("ESC");
+            line.push_span(" clear".dim());
+            text.push_line(line.centered());
+            text.render(location, buf);
+            //line.push_span(format!("{:>1$}", "q: quit", WIDTH).dim());
+            text = Text::default();
+            line = Line::default();
+            line.push_span("q");
+            line.push_span("uit".dim());
+            //text.push_line(line.centered());
+            text.push_line(line.right_aligned());
             text.render(location, buf);
         }
 
