@@ -1537,7 +1537,7 @@ fn main() -> std::io::Result<()> {
 mod tests {
     use super::*;
     use crossterm::event::{KeyCode, KeyEvent, KeyModifiers};
-    use insta::assert_snapshot;
+    use insta::{assert_snapshot, assert_debug_snapshot};
     use log::info;
     use ratatui::{backend::TestBackend, Terminal};
     use std::ffi::OsString;
@@ -1589,7 +1589,7 @@ mod tests {
     fn initial_render_app() {
         let mut ta = TestApp::new();
         ta.render();
-        assert_snapshot!(ta.backend());
+        assert_debug_snapshot!(ta.backend());
     }
 
     #[test]
