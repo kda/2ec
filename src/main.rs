@@ -1561,6 +1561,13 @@ mod tests {
                 terminal: Terminal::new(TestBackend::new(40, 26)).unwrap(),
             }
         }
+        fn new_large() -> Self {
+            let empty_args = vec![];
+            TestApp{
+                app: App::new(empty_args),
+                terminal: Terminal::new(TestBackend::new(55, 26)).unwrap(),
+            }
+        }
         fn render(&mut self) {
             self.terminal
                 .draw(|frame| frame.render_widget(&self.app, frame.area()))
@@ -1570,7 +1577,10 @@ mod tests {
             self.terminal.backend()
         }
         fn handle_key(&mut self, key: char) {
-            let ke = KeyEvent::new(KeyCode::Char(key), KeyModifiers::NONE);
+            self.handle_key_code(KeyCode::Char(key));
+        }
+        fn handle_key_code(&mut self, key_code: KeyCode) {
+            let ke = KeyEvent::new(key_code, KeyModifiers::NONE);
             self.app.handle_key_event(ke);
         }
         fn handle_string(&mut self, s: &str) {
@@ -1584,7 +1594,7 @@ mod tests {
     fn initial_render_app() {
         let mut ta = TestApp::new();
         ta.render();
-        assert_debug_snapshot!(ta.backend());
+        assert_snapshot!(ta.backend());
     }
 
     #[test]
@@ -1599,7 +1609,7 @@ mod tests {
         let mut ta = TestApp::new();
         ta.handle_string("123=H");
         ta.render();
-        assert_debug_snapshot!(ta.backend());
+        assert_snapshot!(ta.backend());
     }
 
     #[test]
@@ -1607,7 +1617,7 @@ mod tests {
         let mut ta = TestApp::new();
         ta.handle_string("A123.45=+4.9F5");
         ta.render();
-        assert_debug_snapshot!(ta.backend());
+        assert_snapshot!(ta.backend());
     }
 
     #[test]
@@ -1673,8 +1683,68 @@ mod tests {
         let mut ta = TestApp::new_with_args(args);
         ta.handle_key('#');
         ta.render();
-        assert_debug_snapshot!(ta.backend());
+        assert_snapshot!(ta.backend());
 
         Ok(())
+    }
+
+    // TODO: convert handle_key, handle_string, handle_key_code to a single method that accepts
+    // KeyEntryType, move the match there.  (maybe better?!?!?)
+    #[derive(Debug)]
+    enum KeyEntryType<'a> {
+        CharT(char),
+        StringT(&'a str),
+        KeyCodeT(KeyCode),
+    }
+
+    #[test]
+    fn generate_demo() {
+        use KeyEntryType::*;
+        let mut ta = TestApp::new_large();
+        ta.render();
+        assert_debug_snapshot!("demo_000", ta.backend());
+
+        let keys = vec![
+            CharT('6'),
+            CharT('1'),
+            CharT('O'),
+            CharT('<'),
+            CharT('2'),
+            CharT('B'),
+            CharT('H'),
+            CharT('/'),
+            CharT('3'),
+            CharT('d'),
+            CharT('='),
+            CharT('M'),
+            CharT('s'),
+            CharT('1'),
+            CharT('D'),
+            CharT('A'),
+            CharT('F'),
+            CharT('9'),
+            StringT("6371"),
+            KeyCodeT(KeyCode::Enter),
+            CharT('s'),
+            CharT('2'),
+            CharT('r'),
+            CharT('1'),
+            CharT('*'),
+            CharT('#'),
+            CharT('p'),
+            CharT('*'),
+        ];
+
+        for (index, key) in keys.into_iter().enumerate() {
+            let suffix = format!("demo_{:03}", index + 1);
+            //println!("suffix: {suffix}");
+            match key {
+                CharT(c) => ta.handle_key(c),
+                StringT(s) => ta.handle_string(&s),
+                KeyCodeT(kc) => ta.handle_key_code(kc),
+            }
+            ta.render();
+            assert_debug_snapshot!(suffix, ta.backend());
+        }
     }
 }

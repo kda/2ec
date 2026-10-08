@@ -1,0 +1,54 @@
+---
+source: src/main.rs
+expression: ta.backend()
+---
+TestBackend {
+    buffer: Buffer {
+        area: Rect { x: 0, y: 0, width: 55, height: 26 },
+        content: [
+            "╭─────────────────────────────────╮╭──────────────────╮",
+            "│   *                             ││ memory registers │",
+            "│                      4.000000000││                  │",
+            "│DEC (10)                      dec││0: 0.000000000    │",
+            "╰─────────────────────────────────╯│                  │",
+            "╭─────────────────────────────────╮│1: 4.000000000    │",
+            "│        select a constant        ││                  │",
+            "│                                 ││2: 6371.000000000 │",
+            "│2: "sqrt of 2"                   ││                  │",
+            "│e: "e"                           ││3: 0.000000000    │",
+            "│g: "golden ratio"                ││                  │",
+            "│p: "pi"                          ││4: 0.000000000    │",
+            "│t: "tau"                         ││                  │",
+            "│                                 ││5: 0.000000000    │",
+            "│                                 ││                  │",
+            "│                                 ││6: 0.000000000    │",
+            "│                                 ││                  │",
+            "│                                 ││7: 0.000000000    │",
+            "│                                 ││                  │",
+            "│                                 ││8: 0.000000000    │",
+            "│                                 ││                  │",
+            "│                                 ││9: 0.000000000    │",
+            "│                                 ││                  │",
+            "│? help      ESC clear        quit││                  │",
+            "╰─────────────────────────────────╯╰──────────────────╯",
+            "                                                       ",
+        ],
+        styles: [
+            x: 0, y: 0, fg: Reset, bg: Reset, underline: Reset, modifier: NONE,
+            x: 2, y: 23, fg: Reset, bg: Reset, underline: Reset, modifier: DIM,
+            x: 7, y: 23, fg: Reset, bg: Reset, underline: Reset, modifier: NONE,
+            x: 16, y: 23, fg: Reset, bg: Reset, underline: Reset, modifier: DIM,
+            x: 22, y: 23, fg: Reset, bg: Reset, underline: Reset, modifier: NONE,
+            x: 31, y: 23, fg: Reset, bg: Reset, underline: Reset, modifier: DIM,
+            x: 34, y: 23, fg: Reset, bg: Reset, underline: Reset, modifier: NONE,
+        ]
+    },
+    scrollback: Buffer {
+        area: Rect { x: 0, y: 0, width: 55, height: 0 }
+    },
+    cursor: false,
+    pos: (
+        0,
+        0,
+    ),
+}

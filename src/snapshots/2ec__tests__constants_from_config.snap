@@ -2,53 +2,29 @@
 source: src/main.rs
 expression: ta.backend()
 ---
-TestBackend {
-    buffer: Buffer {
-        area: Rect { x: 0, y: 0, width: 40, height: 26 },
-        content: [
-            "╭─────────────────────────────────╮     ",
-            "│                                 │     ",
-            "│                                0│     ",
-            "│DEC (10)                      int│     ",
-            "╰─────────────────────────────────╯     ",
-            "╭─────────────────────────────────╮     ",
-            "│        select a constant        │     ",
-            "│                                 │     ",
-            "│2: "sqrt of 2"                   │     ",
-            "│e: "e"                           │     ",
-            "│g: "golden ratio"                │     ",
-            "│k: "kmh / mph"                   │     ",
-            "│p: "pi"                          │     ",
-            "│t: "tau"                         │     ",
-            "│                                 │     ",
-            "│                                 │     ",
-            "│                                 │     ",
-            "│                                 │     ",
-            "│                                 │     ",
-            "│                                 │     ",
-            "│                                 │     ",
-            "│                                 │     ",
-            "│                                 │     ",
-            "│? help      ESC clear        quit│     ",
-            "╰─────────────────────────────────╯     ",
-            "                                        ",
-        ],
-        styles: [
-            x: 0, y: 0, fg: Reset, bg: Reset, underline: Reset, modifier: NONE,
-            x: 2, y: 23, fg: Reset, bg: Reset, underline: Reset, modifier: DIM,
-            x: 7, y: 23, fg: Reset, bg: Reset, underline: Reset, modifier: NONE,
-            x: 16, y: 23, fg: Reset, bg: Reset, underline: Reset, modifier: DIM,
-            x: 22, y: 23, fg: Reset, bg: Reset, underline: Reset, modifier: NONE,
-            x: 31, y: 23, fg: Reset, bg: Reset, underline: Reset, modifier: DIM,
-            x: 34, y: 23, fg: Reset, bg: Reset, underline: Reset, modifier: NONE,
-        ]
-    },
-    scrollback: Buffer {
-        area: Rect { x: 0, y: 0, width: 40, height: 0 }
-    },
-    cursor: false,
-    pos: (
-        0,
-        0,
-    ),
-}
+"╭─────────────────────────────────╮     "
+"│                                 │     "
+"│                                0│     "
+"│DEC (10)                      int│     "
+"╰─────────────────────────────────╯     "
+"╭─────────────────────────────────╮     "
+"│        select a constant        │     "
+"│                                 │     "
+"│2: "sqrt of 2"                   │     "
+"│e: "e"                           │     "
+"│g: "golden ratio"                │     "
+"│k: "kmh / mph"                   │     "
+"│p: "pi"                          │     "
+"│t: "tau"                         │     "
+"│                                 │     "
+"│                                 │     "
+"│                                 │     "
+"│                                 │     "
+"│                                 │     "
+"│                                 │     "
+"│                                 │     "
+"│                                 │     "
+"│                                 │     "
+"│? help      ESC clear        quit│     "
+"╰─────────────────────────────────╯     "
+"                                        "
