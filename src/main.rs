@@ -1418,7 +1418,7 @@ impl Widget for &App {
                     let KeyCode::Char(c) = key else {
                         panic!("ERROR: unexpected non-character key =>{}<= found in SelectContent display", key);
                     };
-                    lines.push(format!("{}: {:?}", c, ce.name));
+                    lines.push(format!("{}: {}", c, ce.name));
                 }
                 lines.sort();
                 let content = lines.join("\n");
