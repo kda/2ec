@@ -1604,7 +1604,7 @@ mod tests {
         let mut ta = TestApp::new();
         ta.handle_string("123=H");
         ta.render();
-        assert_snapshot!(ta.backend());
+        assert_debug_snapshot!(ta.backend());
     }
 
     #[test]
@@ -1612,7 +1612,7 @@ mod tests {
         let mut ta = TestApp::new();
         ta.handle_string("A123.45=+4.9F5");
         ta.render();
-        assert_snapshot!(ta.backend());
+        assert_debug_snapshot!(ta.backend());
     }
 
     #[test]
@@ -1678,7 +1678,7 @@ mod tests {
         let mut ta = TestApp::new_with_args(args);
         ta.handle_key('#');
         ta.render();
-        assert_snapshot!(ta.backend());
+        assert_debug_snapshot!(ta.backend());
 
         Ok(())
     }
