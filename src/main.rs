@@ -1351,7 +1351,7 @@ impl Widget for &App {
                 }
                 text.push_line(line.centered());
 
-                // number manipulation
+                // TODO: number manipulation (whole, trunc)
 
                 // memory
                 line = Line::default();
@@ -1467,31 +1467,26 @@ impl Widget for &App {
 
         // Nearly Always present
         if self.mode != Mode::AskingHelp {
-
             let mut text = Text::default();
             let mut line = Line::default();
-            //const WIDTH: usize = 11;
-            //line.push_span(format!("{:<1$}", "ESC: clear", WIDTH));
             line.push_span("?");
             line.push_span(" help".dim());
             text.push_line(line.left_aligned());
             location.height = text.height() as u16;
             location.y = DISPLAY_HEIGHT + KEYPAD_HEIGHT - location.height - 1;
             text.render(location, buf);
-            //line.push_span(format!("{:^1$}", "?: help", WIDTH));
-            //piece = Line::default();
+
             text = Text::default();
             line = Line::default();
             line.push_span("ESC");
             line.push_span(" clear".dim());
             text.push_line(line.centered());
             text.render(location, buf);
-            //line.push_span(format!("{:>1$}", "q: quit", WIDTH).dim());
+
             text = Text::default();
             line = Line::default();
             line.push_span("q");
             line.push_span("uit".dim());
-            //text.push_line(line.centered());
             text.push_line(line.right_aligned());
             text.render(location, buf);
         }

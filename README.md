@@ -69,6 +69,7 @@ I wanted to have a little project to start sharpening my new Rust skills on.  AN
 -   handle re-sizing (similar to screeen too small)
 -   after color: maybe a small screen version (minimal keypad, always hidden registers, shorter display)
 -   at some magnitude of Decimal mode, it must automatically switch to Scientifc.
+-   select constants screen does not use bright and dim to aid navigation
 ## post-color enablement
 -   help: emphasize the useful key
 ## refactor
@@ -85,6 +86,7 @@ I wanted to have a little project to start sharpening my new Rust skills on.  AN
 -   moving from Integer to Decimal mode, patches 2 zeros on accumulator
     -   should change nothing, only the mode (behind the scenes)
     -   does the opposite (Decimal to Integer), remove value to the right of the decimal?
+-   demo animation is broken for constants
 ## command line
 -   confirm quit request
 ## preferences (also, all available via command line)
