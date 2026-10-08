@@ -59,12 +59,12 @@ def determine_global_width(snap_files):
     Checks explicit 'width' keys first, falling back to counting raw line character lengths.
     """
     max_width = 40  # Hard floor default width minimum matching your layout setup
-
+    
     for snap_file in snap_files:
         if not os.path.exists(snap_file):
             continue
         body = extract_clean_snap_body(snap_file)
-
+        
         # Check if the snapshot defines a structural width variable block
         width_match = re.search(r'width:\s*(\d+)', body)
         if width_match:
@@ -77,7 +77,7 @@ def determine_global_width(snap_files):
                 if (line.startswith('"') and line.endswith('"')) or (line.startswith("'") and line.endswith("'")):
                     line = line[1:-1]
                 max_width = max(max_width, len(line.rstrip()))
-
+                
     return max_width
 
 def parse_ratatui_buffer(buffer_text, target_width):
@@ -97,7 +97,7 @@ def parse_ratatui_buffer(buffer_text, target_width):
     content_block_match = re.search(r'content:\s*\[(.*?)\]', buffer_text, re.DOTALL)
     if not content_block_match:
         return None
-
+    
     content_raw = content_block_match.group(1)
     line_pattern = re.compile(r'"([^"\\]*(?:\\.[^"\\]*)*)"')
     lines = [match.group(1) for match in line_pattern.finditer(content_raw)]
@@ -109,7 +109,7 @@ def parse_ratatui_buffer(buffer_text, target_width):
         chars = list(raw_line)
         while len(chars) < target_width:
             chars.append(" ")
-
+            
         row = []
         for x in range(target_width):
             row.append({
@@ -128,7 +128,7 @@ def parse_ratatui_buffer(buffer_text, target_width):
         style_pattern = re.compile(
             r'x:\s*(\d+),\s*y:\s*(\d+),\s*fg:\s*(\w+),\s*bg:\s*(\w+),\s*underline:\s*([\w:]+),\s*modifier:\s*(\w+)'
         )
-
+        
         for match in style_pattern.finditer(styles_raw):
             sx = int(match.group(1))
             sy = int(match.group(2))
@@ -282,7 +282,7 @@ def make_animation():
         return
 
     APNG.from_files(png_frames, delay=1000).save(output_apng)
-    
+
     for frame in png_frames:
         os.remove(frame)
 
@@ -290,4 +290,3 @@ def make_animation():
 
 if __name__ == "__main__":
     make_animation()
-
