@@ -197,6 +197,11 @@ Octal       (O)
 
 Use base-8 (octal).
 
+## Q
+Square root (Q)
+
+Calculate the square root of the current value.
+
 ## S
 Scientific  (S)
 

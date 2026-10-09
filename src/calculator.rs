@@ -17,11 +17,13 @@ pub enum Operation {
     Xnor,
     IntegerPortion,
     FractionalPortion,
+    SquareRoot,
 }
 
 #[derive(Clone, Copy, Debug, Eq, Hash, PartialEq)]
 pub enum Error {
     DivideByZero,
+    NotANumber,
 }
 
 #[derive(Copy, Clone, Debug, Default, EnumIter, Eq, PartialEq, Hash, Ord, PartialOrd)]
@@ -129,6 +131,8 @@ impl Calculator {
                     Operation::FractionalPortion => {
                         self.state.value = self.state.value.fract()
                     }
+                    Operation::SquareRoot => {
+                    }
                 }
             } else {
                 self.state.value = value;
@@ -148,6 +152,12 @@ impl Calculator {
                     }
                     Operation::FractionalPortion => {
                         self.state.value = self.state.value.fract()
+                    }
+                    Operation::SquareRoot => {
+                        match self.state.value.sqrt() {
+                            Ok(value) => self.state.value = value,
+                            Err(e) => return Err(e),
+                        }
                     }
                     _ => {}
                 }
@@ -228,7 +238,7 @@ impl ValuePair {
         }
         *self
     }
-    pub fn trunc(& self) -> Self {
+    pub fn trunc(&self) -> Self {
         let mut retval = *self;
         debug!("*self: {:?}", *self);
         debug!("retval: {:?}", retval);
@@ -236,6 +246,23 @@ impl ValuePair {
             retval.set_decimal(self.get_decimal().trunc());
         }
         retval
+    }
+    pub fn sqrt(&self) -> Result<Self, Error> {
+        let mut retval = *self;
+        let mut square = self.get_decimal();
+        if retval.numeric_mode == NumericMode::Integer {
+            square = self.get_integer() as f64;
+        }
+        let root = square.sqrt();
+        if root.is_nan() {
+            return Err(Error::NotANumber);
+        }
+        if retval.numeric_mode == NumericMode::Integer {
+            retval.set_integer(root as i128);
+        } else {
+            retval.set_decimal(root);
+        }
+        Ok(retval)
     }
 }
 

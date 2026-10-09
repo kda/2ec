@@ -53,8 +53,8 @@ I wanted to have a little project to start sharpening my new Rust skills on.  AN
 ## features
 -   calc
     -   bit ops: 16 bit, 32 bit
-    -   powers: e^x, 10^x, y^x, x^x
-    -   special: sqrt, ln, log, invert fraction, factorial
+    -   powers: e^x, 10^x, y^x, x^x, x^2 (@)
+    -   special: ln, log, invert fraction (reciprocal) (R), factorial
     -   trigonometry
 - 	add color (if terminal capable and/or if flag)
 - 	check terminal size at startup for available space (exit gracefully if insufficient.)
@@ -70,6 +70,8 @@ I wanted to have a little project to start sharpening my new Rust skills on.  AN
 -   after color: maybe a small screen version (minimal keypad, always hidden registers, shorter display)
 -   at some magnitude of Decimal mode, it must automatically switch to Scientifc.
 -   select constants screen does not use bright and dim to aid navigation
+## hints
+-   add for sqrt (Q)
 ## post-color enablement
 -   help: emphasize the useful key
 ## refactor

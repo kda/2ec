@@ -545,6 +545,18 @@ const KEYS_MAPPING: LazyLock<HashMap<KeyCode, KeyEntry>> = LazyLock::new(|| {
                 ..Default::default()
             }
         ),
+        (KeyCode::Char('Q'),
+            KeyEntry {
+                mode_op: HashMap::from([
+                    (Mode::Calculating, (|app| {
+                        app.calculator.set_pending_operation(Operation::SquareRoot);
+                        app.apply_equals();
+                    }) as KeyOperation),
+                ]),
+                help_heading: "Q",
+                ..Default::default()
+            }
+        ),
         (KeyCode::Char('S'),
             KeyEntry {
                 mode_op: HashMap::from([
@@ -839,9 +851,11 @@ const OPERATION_NAMES: LazyLock<HashMap<Operation, &str>> = LazyLock::new(|| {
         (Operation::RightShift, ">"),
         (Operation::IntegerPortion, "W"),
         (Operation::FractionalPortion, "T"),
+        (Operation::SquareRoot, "Q"),
     ])
 });
 
+// TODO: add test to make sure these exist for every error
 const ERROR_NAMES: LazyLock<HashMap<Error, &str>> = LazyLock::new(|| {
     HashMap::from([
         (Error::DivideByZero, "divide by zero"),
@@ -1687,6 +1701,8 @@ mod tests {
 
         Ok(())
     }
+
+    // TODO: add test for each error condition to ensure they fire correctly
 
     // TODO: convert handle_key, handle_string, handle_key_code to a single method that accepts
     // KeyEntryType, move the match there.  (maybe better?!?!?)
