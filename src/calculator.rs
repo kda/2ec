@@ -20,7 +20,7 @@ pub enum Operation {
     SquareRoot,
 }
 
-#[derive(Clone, Copy, Debug, Eq, Hash, PartialEq)]
+#[derive(Clone, Copy, Debug, EnumIter, Eq, Hash, PartialEq)]
 pub enum Error {
     DivideByZero,
     NotANumber,
@@ -156,7 +156,11 @@ impl Calculator {
                     Operation::SquareRoot => {
                         match self.state.value.sqrt() {
                             Ok(value) => self.state.value = value,
-                            Err(e) => return Err(e),
+                            Err(e) => {
+                                self.state.error = Some(e);
+                                self.state.pending_operation = None;
+                                return Err(e);
+                            }
                         }
                     }
                     _ => {}

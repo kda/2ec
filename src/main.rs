@@ -855,10 +855,10 @@ const OPERATION_NAMES: LazyLock<HashMap<Operation, &str>> = LazyLock::new(|| {
     ])
 });
 
-// TODO: add test to make sure these exist for every error
 const ERROR_NAMES: LazyLock<HashMap<Error, &str>> = LazyLock::new(|| {
     HashMap::from([
         (Error::DivideByZero, "divide by zero"),
+        (Error::NotANumber, "not a number"),
     ])
 });
 
@@ -1678,6 +1678,13 @@ mod tests {
     }
 
     #[test]
+    fn check_error_messages() {
+        for err in calculator::Error::iter() {
+            assert!(ERROR_NAMES.contains_key(&err), "Error does not have a name ({:?})", err);
+        }
+    }
+
+    #[test]
     fn constants_from_config() -> std::io::Result<()> {
         // Prep the config
         let config_content = r#"
@@ -1702,7 +1709,27 @@ mod tests {
         Ok(())
     }
 
-    // TODO: add test for each error condition to ensure they fire correctly
+    #[test]
+    fn check_error_dividebyzero() {
+        let mut ta = TestApp::new();
+        ta.handle_string("78/0=");
+        ta.render();
+        assert_snapshot!(ta.backend());
+        ta.handle_key('q');
+        ta.render();
+        assert_snapshot!(ta.backend());
+    }
+
+    #[test]
+    fn check_error_notanumber() {
+        let mut ta = TestApp::new();
+        ta.handle_string("45=CQ");
+        ta.render();
+        assert_snapshot!(ta.backend());
+        ta.handle_key('q');
+        ta.render();
+        assert_snapshot!(ta.backend());
+    }
 
     // TODO: convert handle_key, handle_string, handle_key_code to a single method that accepts
     // KeyEntryType, move the match there.  (maybe better?!?!?)
