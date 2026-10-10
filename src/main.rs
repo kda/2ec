@@ -1367,6 +1367,12 @@ impl Widget for &App {
 
                 // TODO: number manipulation (whole, trunc)
 
+                line = Line::default();
+                line.push_span("root: ".dim());
+                line.spans.extend(self.highlight_letter_at("sQrt", 1).spans);
+                line.push_span(" ");
+                text.push_line(line.left_aligned());
+
                 // memory
                 line = Line::default();
                 line.push_span(" mem: ".dim());
