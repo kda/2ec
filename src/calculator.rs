@@ -18,6 +18,7 @@ pub enum Operation {
     IntegerPortion,
     FractionalPortion,
     SquareRoot,
+    Square,
 }
 
 #[derive(Clone, Copy, Debug, EnumIter, Eq, Hash, PartialEq)]
@@ -133,6 +134,8 @@ impl Calculator {
                     }
                     Operation::SquareRoot => {
                     }
+                    Operation::Square => {
+                    }
                 }
             } else {
                 self.state.value = value;
@@ -162,6 +165,9 @@ impl Calculator {
                                 return Err(e);
                             }
                         }
+                    }
+                    Operation::Square => {
+                            self.state.value *= self.state.value;
                     }
                     _ => {}
                 }

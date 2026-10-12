@@ -53,7 +53,7 @@ I wanted to have a little project to start sharpening my new Rust skills on.  AN
 ## features
 -   calc
     -   bit ops: 16 bit, 32 bit
-    -   powers: e^x, 10^x, y^x, x^x, x^2 (@)
+    -   powers: e^x, 10^x, y^x, x^x,
     -   special: ln, log, invert fraction (reciprocal) (R), factorial
     -   trigonometry
 - 	add color (if terminal capable and/or if flag)

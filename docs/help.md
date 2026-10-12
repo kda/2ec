@@ -147,6 +147,11 @@ Help    (?)
 
 Follow this key by any other key to learn how that key functions.
 
+## @
+Square      (@)
+
+Calculate the square of the current value.
+
 ## A
 Decimal     (A)
 
