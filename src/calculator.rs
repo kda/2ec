@@ -19,6 +19,8 @@ pub enum Operation {
     FractionalPortion,
     SquareRoot,
     Square,
+    EToThePowerOf,
+    TenToThePowerOf,
 }
 
 #[derive(Clone, Copy, Debug, EnumIter, Eq, Hash, PartialEq)]
@@ -132,10 +134,10 @@ impl Calculator {
                     Operation::FractionalPortion => {
                         self.state.value = self.state.value.fract()
                     }
-                    Operation::SquareRoot => {
-                    }
-                    Operation::Square => {
-                    }
+                    Operation::SquareRoot => {}
+                    Operation::Square => {}
+                    Operation::EToThePowerOf => {}
+                    Operation::TenToThePowerOf => {}
                 }
             } else {
                 self.state.value = value;
@@ -167,7 +169,20 @@ impl Calculator {
                         }
                     }
                     Operation::Square => {
-                            self.state.value *= self.state.value;
+                        self.state.value *= self.state.value;
+                    }
+                    Operation::EToThePowerOf => {
+                        self.state.value = self.state.value.exp()
+                    }
+                    Operation::TenToThePowerOf => {
+                        let mut base = ValuePair::default();
+                        if self.state.value.get_numeric_mode() == NumericMode::Integer {
+                            base.set_integer(10);
+                        } else {
+                            base.set_numeric_mode(NumericMode::Float);
+                            base.set_decimal(10.0);
+                        }
+                        self.state.value = base.pow(self.state.value);
                     }
                     _ => {}
                 }
@@ -270,9 +285,36 @@ impl ValuePair {
         if retval.numeric_mode == NumericMode::Integer {
             retval.set_integer(root as i128);
         } else {
+            retval.set_numeric_mode(NumericMode::Float);
             retval.set_decimal(root);
         }
         Ok(retval)
+    }
+    pub fn exp(&self) -> Self {
+        let mut retval = ValuePair::default();
+        if self.numeric_mode == NumericMode::Integer {
+            let float_of_int = self.integer as f64;
+            let result = float_of_int.exp();
+            retval.set_integer(result as i128);
+        } else {
+            retval.set_numeric_mode(NumericMode::Float);
+            let result = self.decimal.exp();
+            retval.set_decimal(result);
+        }
+        retval
+    }
+    pub fn pow(&self, other: ValuePair) -> Self {
+        let mut retval = ValuePair::default();
+        if self.numeric_mode == NumericMode::Integer {
+            let float_of_int = self.integer as f64;
+            let result = float_of_int.powf(other.integer as f64);
+            retval.set_integer(result as i128);
+        } else {
+            retval.set_numeric_mode(NumericMode::Float);
+            let result = self.decimal.powf(other.decimal);
+            retval.set_decimal(result);
+        }
+        retval
     }
 }
 

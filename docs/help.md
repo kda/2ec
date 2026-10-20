@@ -290,12 +290,22 @@ Store   (s)
 
 Store the current value in a memory register.
 
+## e_raised_to_x
+e^x     ({)
+
+Raise e to the power of the current value.
+
 ## or
 Bit-wise Or     (|)
 
 Apply the AND operator.
 
 Only works in (I)nteger (whole number) mode.
+
+## ten_raised_to_x
+10^x    (})
+
+Raise 10 to the power of the current value.
 
 ## tilde
 Invert      (~)

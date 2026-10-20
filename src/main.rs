@@ -49,7 +49,7 @@ struct KeyEntry<'a> {
 }
 
 // in order for the future
-//  [ESC]  ! " # $ [% &] ' ( ) , [- . /] [0-9] : ; [< = >] [?] [@] [A-Z] [ \ [^] _ ` [a-z] { [|] } [~] DEL
+//  [ESC]  ! " # $ [% &] ' ( ) , [- . /] [0-9] : ; [< = >] [?] [@] [A-Z] [ \ [^] _ ` [a-z] [{ | }] [~] DEL
 
 const KEYS_MAPPING: LazyLock<HashMap<KeyCode, KeyEntry>> = LazyLock::new(|| {
     HashMap::from([
@@ -758,6 +758,18 @@ const KEYS_MAPPING: LazyLock<HashMap<KeyCode, KeyEntry>> = LazyLock::new(|| {
                 ..Default::default()
             }
         ),
+        (KeyCode::Char('{'),
+            KeyEntry {
+                mode_op: HashMap::from([
+                     (Mode::Calculating, (|app| {
+                        app.calculator.set_pending_operation(Operation::EToThePowerOf);
+                        app.apply_equals();
+                     }) as KeyOperation),
+                ]),
+                help_heading: "e_raised_to_x",
+                ..Default::default()
+            }
+        ),
         (KeyCode::Char('|'),
             KeyEntry {
                 mode_op: HashMap::from([
@@ -768,6 +780,18 @@ const KEYS_MAPPING: LazyLock<HashMap<KeyCode, KeyEntry>> = LazyLock::new(|| {
                      }) as KeyOperation),
                 ]),
                 help_heading: "or",
+                ..Default::default()
+            }
+        ),
+        (KeyCode::Char('}'),
+            KeyEntry {
+                mode_op: HashMap::from([
+                     (Mode::Calculating, (|app| {
+                        app.calculator.set_pending_operation(Operation::TenToThePowerOf);
+                        app.apply_equals();
+                     }) as KeyOperation),
+                ]),
+                help_heading: "ten_raised_to_x",
                 ..Default::default()
             }
         ),
@@ -865,6 +889,8 @@ const OPERATION_NAMES: LazyLock<HashMap<Operation, &str>> = LazyLock::new(|| {
         (Operation::FractionalPortion, "T"),
         (Operation::SquareRoot, "Q"),
         (Operation::Square, "@"),
+        (Operation::EToThePowerOf, "{"),
+        (Operation::TenToThePowerOf, "}"),
     ])
 });
 
@@ -1381,10 +1407,18 @@ impl Widget for &App {
                 // TODO: number manipulation (whole, trunc)
 
                 line = Line::default();
+                line.push_span("expo: ".dim());
+                line.spans.extend(self.highlight_letter_at("squ@re", 3).spans);
+                line.push_span(" ");
+                line.spans.extend(self.highlight_letter_at("{ e^x", 0).spans);
+                line.push_span(" ");
+                line.spans.extend(self.highlight_letter_at("} 10^x", 0).spans);
+                text.push_line(line.left_aligned());
+
+                line = Line::default();
                 line.push_span("root: ".dim());
                 line.spans.extend(self.highlight_letter_at("sQrt", 1).spans);
                 line.push_span(" ");
-                line.spans.extend(self.highlight_letter_at("squ@re", 3).spans);
                 text.push_line(line.left_aligned());
 
                 // memory
@@ -1690,6 +1724,7 @@ mod tests {
         }
     }
 
+    // TODO: add test to ensure keys are unique
     #[test]
     fn check_operation_names() {
         for op in calculator::Operation::iter() {
