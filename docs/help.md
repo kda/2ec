@@ -231,6 +231,11 @@ Trim off the fractional portion.  Retain the integer (whole number) portion.
 
 Non-operation in (I)nteger (whole number) mode.
 
+## Y
+y^x     (Y)
+
+Raise the current value (y) to the power of the next value (x).
+
 ## hat
 Bit-wise Xor   (^)
 

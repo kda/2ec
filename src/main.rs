@@ -628,6 +628,15 @@ const KEYS_MAPPING: LazyLock<HashMap<KeyCode, KeyEntry>> = LazyLock::new(|| {
                 ..Default::default()
             }
         ),
+        (KeyCode::Char('Y'),
+            KeyEntry {
+                mode_op: HashMap::from([
+                    (Mode::Calculating, (|app| { app.apply_operation(Operation::YToThePowerOf); }) as KeyOperation),
+                ]),
+                help_heading: "Y",
+                ..Default::default()
+            }
+        ),
         (KeyCode::Char('^'),
             KeyEntry {
                 mode_op: HashMap::from([
@@ -891,6 +900,7 @@ const OPERATION_NAMES: LazyLock<HashMap<Operation, &str>> = LazyLock::new(|| {
         (Operation::Square, "@"),
         (Operation::EToThePowerOf, "{"),
         (Operation::TenToThePowerOf, "}"),
+        (Operation::YToThePowerOf, "Y"),
     ])
 });
 
@@ -1413,6 +1423,8 @@ impl Widget for &App {
                 line.spans.extend(self.highlight_letter_at("{ e^x", 0).spans);
                 line.push_span(" ");
                 line.spans.extend(self.highlight_letter_at("} 10^x", 0).spans);
+                line.push_span(" ");
+                line.spans.extend(self.highlight_letter_at("Y^x", 0).spans);
                 text.push_line(line.left_aligned());
 
                 line = Line::default();

@@ -21,6 +21,7 @@ pub enum Operation {
     Square,
     EToThePowerOf,
     TenToThePowerOf,
+    YToThePowerOf,
 }
 
 #[derive(Clone, Copy, Debug, EnumIter, Eq, Hash, PartialEq)]
@@ -138,6 +139,9 @@ impl Calculator {
                     Operation::Square => {}
                     Operation::EToThePowerOf => {}
                     Operation::TenToThePowerOf => {}
+                    Operation::YToThePowerOf => {
+                        self.state.value = self.state.value.pow(value);
+                    }
                 }
             } else {
                 self.state.value = value;
