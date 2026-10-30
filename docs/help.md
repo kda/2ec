@@ -66,7 +66,7 @@ Perform subtraction.
 ## dot
 Decimal point   (.)
 
-Enter the decimal point of a decimal or scientific number.
+Enter the decimal point of a float or scientific number.
 
 ## slash
 Divide      (/)
@@ -153,9 +153,9 @@ Square      (@)
 Calculate the square of the current value.
 
 ## A
-Decimal     (A)
+Float   (A)
 
-Work in decimal (point) mode.
+Work in float (decimal point) mode.
 
 ## B
 Binary      (H)
@@ -215,7 +215,7 @@ Work in scientific mode.
 ## T
 Frac(T)ion  (T)
 
-Trim off the fractional portion.  Retain the integer (whole number) portion.  Keep everything on the left of the decimal.
+Trim off the fractional portion.  Retain the integer (whole number) portion.  Keep everything on the left of the decimal point.
 
 Non-operation in Integer (Whole Number) Mode.
 

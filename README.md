@@ -71,7 +71,6 @@ I wanted to have a little project to start sharpening my new Rust skills on.  AN
 -   at some magnitude of Decimal mode, it must automatically switch to Scientifc.
 -   select constants screen does not use bright and dim to aid navigation
 ## hints
--   add for sqrt (Q)
 ## post-color enablement
 -   help: emphasize the useful key
 ## refactor
@@ -92,7 +91,6 @@ I wanted to have a little project to start sharpening my new Rust skills on.  AN
 ## command line
 -   confirm quit request
 ## preferences (also, all available via command line)
--   start in decimal or scientific mode (or integer (default))
 -   start in hex, oct, or bin base (or decimal (default))
 -   retain values of storage registers between runs
 -   support upper case hex display

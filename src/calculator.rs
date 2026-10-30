@@ -1,3 +1,4 @@
+use clap::ValueEnum;
 use log::debug;
 use strum_macros::EnumIter;
 
@@ -38,7 +39,8 @@ pub enum NumericBase {
     Binary,
 }
 
-#[derive(Copy, Clone, Debug, Default, EnumIter, Eq, Hash, PartialEq, Ord, PartialOrd)]
+#[derive(Copy, Clone, Debug, Default, EnumIter, Eq, Hash, PartialEq, Ord, PartialOrd, ValueEnum, serde::Deserialize)]
+#[serde(rename_all = "lowercase")]
 pub enum NumericMode {
     #[default]Integer,
     Float,

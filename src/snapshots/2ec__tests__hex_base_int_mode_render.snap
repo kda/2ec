@@ -14,7 +14,7 @@ expression: ta.backend()
 "│root: sQrt                       │     "
 "│ mem: store recall               │     "
 "│base: Dec Oct Bin                │     "
-"│mode: decimAl Sci                │     "
+"│mode: floAt Sci                  │     "
 "│                                 │     "
 "│                                 │     "
 "│                                 │     "

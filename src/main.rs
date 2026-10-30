@@ -410,7 +410,7 @@ const KEYS_MAPPING: LazyLock<HashMap<KeyCode, KeyEntry>> = LazyLock::new(|| {
                     }) as KeyOperation),
                 ]),
                 help_heading: "A",
-                hint: "decimAl",
+                hint: "floAt",
                 ..Default::default()
             }
         ),
@@ -875,7 +875,7 @@ const NUMERIC_MODE_KEYS: LazyLock<HashMap<NumericMode, char>> = LazyLock::new(||
 const NUMERIC_MODE_NAMES: LazyLock<HashMap<NumericMode, &str>> = LazyLock::new(|| {
     HashMap::from([
         (NumericMode::Integer, "int"),
-        (NumericMode::Float, "dec"),
+        (NumericMode::Float, "flo"),
         (NumericMode::Scientific, "sci"),
     ])
 });
@@ -958,6 +958,9 @@ struct Args {
     debug: bool,
     #[arg(short, long, default_value="2ec_debug.log")]
     logfile: String,
+    /// numeric mode: default: integer
+    #[arg(short, long, value_enum)]
+    mode: Option<NumericMode>,
 }
 
 impl App {
@@ -992,6 +995,14 @@ impl App {
         };
 
         instance.load_constants();
+
+        if let Some(mode) = args.mode {
+            instance.calculator.set_numeric_mode(mode);
+        } else {
+            if let Some(mode) = instance.config.mode {
+                instance.calculator.set_numeric_mode(mode);
+            }
+        }
 
         instance
     }
@@ -1774,6 +1785,39 @@ mod tests {
         assert_snapshot!(ta.backend());
 
         Ok(())
+    }
+
+    #[test]
+    fn numeric_mode_from_config() -> std::io::Result<()> {
+        // Prep the config
+        let config_content = r#"
+            mode: float
+        "#;
+        let mut file = NamedTempFile::new()?;
+        writeln!(file, "{}", config_content)?;
+
+        let args = vec![
+            "2ec".into(),
+            "--config".into(),
+            file.path().as_os_str().to_os_string(),
+        ];
+        let mut ta = TestApp::new_with_args(args);
+        ta.render();
+        assert_snapshot!(ta.backend());
+
+        Ok(())
+    }
+
+    #[test]
+    fn numericmode_from_cli() {
+        let args = vec![
+            "2ec".into(),
+            "--mode".into(),
+            "scientific".into(),
+        ];
+        let mut ta = TestApp::new_with_args(args);
+        ta.render();
+        assert_snapshot!(ta.backend());
     }
 
     #[test]
