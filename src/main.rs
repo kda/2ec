@@ -1843,8 +1843,6 @@ mod tests {
             CharT('*'),
             CharT('#'),
             CharT('p'),
-            CharT('/'),
-            StringT("10"),
             CharT('*'),
             CharT('r'),
             CharT('2'),
