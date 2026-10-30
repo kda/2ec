@@ -1835,6 +1835,7 @@ mod tests {
             CharT('9'),
             StringT("6371"),
             KeyCodeT(KeyCode::Enter),
+            CharT('@'),
             CharT('s'),
             CharT('2'),
             CharT('r'),
@@ -1842,7 +1843,12 @@ mod tests {
             CharT('*'),
             CharT('#'),
             CharT('p'),
+            CharT('/'),
+            StringT("10"),
             CharT('*'),
+            CharT('r'),
+            CharT('2'),
+            CharT('='),
         ];
 
         for (index, key) in keys.into_iter().enumerate() {
