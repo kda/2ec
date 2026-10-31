@@ -952,6 +952,9 @@ struct App {
 #[derive(Parser, Debug)]
 #[command(author, version, about, long_about = None, name = "2ec")]
 struct Args {
+    /// numeric base: default: decimal (base-10)
+    #[arg(short, long, value_enum)]
+    base: Option<NumericBase>,
     #[arg(short, long)]
     config: Option<String>,
     #[arg(short, long)]
@@ -997,10 +1000,18 @@ impl App {
         instance.load_constants();
 
         if let Some(mode) = args.mode {
-            instance.calculator.set_numeric_mode(mode);
+            instance.set_numeric_mode(mode);
         } else {
             if let Some(mode) = instance.config.mode {
-                instance.calculator.set_numeric_mode(mode);
+                instance.set_numeric_mode(mode);
+            }
+        }
+
+        if let Some(base) = args.base {
+            instance.set_numeric_base(base);
+        } else {
+            if let Some(base) = instance.config.base {
+                instance.set_numeric_base(base);
             }
         }
 
@@ -1814,6 +1825,39 @@ mod tests {
             "2ec".into(),
             "--mode".into(),
             "scientific".into(),
+        ];
+        let mut ta = TestApp::new_with_args(args);
+        ta.render();
+        assert_snapshot!(ta.backend());
+    }
+
+    #[test]
+    fn numeric_base_from_config() -> std::io::Result<()> {
+        // Prep the config
+        let config_content = r#"
+            base: hexadecimal
+        "#;
+        let mut file = NamedTempFile::new()?;
+        writeln!(file, "{}", config_content)?;
+
+        let args = vec![
+            "2ec".into(),
+            "--config".into(),
+            file.path().as_os_str().to_os_string(),
+        ];
+        let mut ta = TestApp::new_with_args(args);
+        ta.render();
+        assert_snapshot!(ta.backend());
+
+        Ok(())
+    }
+
+    #[test]
+    fn numericbase_from_cli() {
+        let args = vec![
+            "2ec".into(),
+            "--base".into(),
+            "octal".into(),
         ];
         let mut ta = TestApp::new_with_args(args);
         ta.render();

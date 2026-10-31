@@ -31,7 +31,8 @@ pub enum Error {
     NotANumber,
 }
 
-#[derive(Copy, Clone, Debug, Default, EnumIter, Eq, PartialEq, Hash, Ord, PartialOrd)]
+#[derive(Copy, Clone, Debug, Default, EnumIter, Eq, PartialEq, Hash, Ord, PartialOrd, ValueEnum, serde::Deserialize)]
+#[serde(rename_all = "lowercase")]
 pub enum NumericBase {
     #[default] Decimal,
     Hexadecimal,

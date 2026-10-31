@@ -91,7 +91,6 @@ I wanted to have a little project to start sharpening my new Rust skills on.  AN
 ## command line
 -   confirm quit request
 ## preferences (also, all available via command line)
--   start in hex, oct, or bin base (or decimal (default))
 -   retain values of storage registers between runs
 -   support upper case hex display
 -   support upper case e in scientific display (maybe same as hex UPPER)

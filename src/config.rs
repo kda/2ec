@@ -5,6 +5,7 @@ use std::io::BufReader;
 use std::io::BufRead;
 use std::env;
 
+use crate::calculator::NumericBase;
 use crate::calculator::NumericMode;
 
 
@@ -18,6 +19,7 @@ pub struct Constant {
 pub struct Config {
     pub constants: Option<HashMap<String, Constant>>,
     pub mode: Option<NumericMode>,
+    pub base: Option<NumericBase>,
 }
 
 impl Config {
