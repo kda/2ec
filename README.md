@@ -68,8 +68,7 @@ I wanted to have a little project to start sharpening my new Rust skills on.  AN
 -   add 'x' for multiply
 -   handle re-sizing (similar to screeen too small)
 -   after color: maybe a small screen version (minimal keypad, always hidden registers, shorter display)
--   at some magnitude of Decimal mode, it must automatically switch to Scientifc.
--   select constants screen does not use bright and dim to aid navigation
+-   at some magnitude of Float mode, it must automatically switch to Scientifc.
 ## hints
 ## post-color enablement
 -   help: emphasize the useful key

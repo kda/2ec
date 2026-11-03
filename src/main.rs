@@ -7,6 +7,7 @@ use ratatui::prelude::{Line, Modifier, Position, Size, Span, Style, Stylize, Tex
 use ratatui::widgets::{Block, BorderType, Widget};
 use ratatui::{DefaultTerminal, Frame};
 use simplelog::{Config, LevelFilter, WriteLogger};
+use std::collections::BTreeMap;
 use std::collections::HashMap;
 use std::ffi::OsString;
 use std::fs::File;
@@ -1246,7 +1247,7 @@ impl App {
         };
         let mut text = Text::default();
         let mut line = Line::default();
-        line.push_span(name);
+        line.push_span(name.dim());
         text.push_line(line.centered());
         line = Line::default();
         text.push_line(line);
@@ -1265,7 +1266,7 @@ impl App {
         };
         let mut text = Text::default();
         if ! title.is_empty() {
-            let title_line = Line::from(title);
+            let title_line = Line::from(title).dim();
             text.push_line(title_line.centered());
             text.push_line(Line::default());
         }
@@ -1515,16 +1516,27 @@ impl Widget for &App {
                 self.render_digits_keypad(area, buf, "number of significant digits");
             },
             Mode::SelectConstant => {
-                let mut lines = Vec::<String>::new();
+                let mut text = Text::default();
+                let mut line = Line::default();
+                line.push_span("select a constant".dim());
+                text.push_line(line.centered());
+                text.push_line(Line::default());
+
+                let mut charNameMap = BTreeMap::<char, String>::new();
                 for (key, ce) in self.constants.iter() {
                     let KeyCode::Char(c) = key else {
                         panic!("ERROR: unexpected non-character key =>{}<= found in SelectContent display", key);
                     };
-                    lines.push(format!("{}: {}", c, ce.name));
+                    charNameMap.insert(*c, ce.name.clone());
                 }
-                lines.sort();
-                let content = lines.join("\n");
-                self.render_keypad_content(area, buf, "select a constant", &content);
+                for (c, name) in charNameMap.iter() {
+                    line = Line::default();
+                    line.push_span(format!("{}", c));
+                    line.push_span(format!(": {}", name).dim());
+                    text.push_line(line);
+                }
+
+                text.render(location, buf);
             }
             Mode::MemoryStore => {
                 self.render_digits_keypad(area, buf, "location to store value");

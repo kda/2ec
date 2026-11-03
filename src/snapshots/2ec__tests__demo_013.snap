@@ -35,6 +35,8 @@ TestBackend {
         ],
         styles: [
             x: 0, y: 0, fg: Reset, bg: Reset, underline: Reset, modifier: NONE,
+            x: 6, y: 6, fg: Reset, bg: Reset, underline: Reset, modifier: DIM,
+            x: 29, y: 6, fg: Reset, bg: Reset, underline: Reset, modifier: NONE,
             x: 2, y: 23, fg: Reset, bg: Reset, underline: Reset, modifier: DIM,
             x: 7, y: 23, fg: Reset, bg: Reset, underline: Reset, modifier: NONE,
             x: 16, y: 23, fg: Reset, bg: Reset, underline: Reset, modifier: DIM,
