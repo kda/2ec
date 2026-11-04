@@ -1522,14 +1522,14 @@ impl Widget for &App {
                 text.push_line(line.centered());
                 text.push_line(Line::default());
 
-                let mut charNameMap = BTreeMap::<char, String>::new();
+                let mut char_name_map = BTreeMap::<char, String>::new();
                 for (key, ce) in self.constants.iter() {
                     let KeyCode::Char(c) = key else {
                         panic!("ERROR: unexpected non-character key =>{}<= found in SelectContent display", key);
                     };
-                    charNameMap.insert(*c, ce.name.clone());
+                    char_name_map.insert(*c, ce.name.clone());
                 }
-                for (c, name) in charNameMap.iter() {
+                for (c, name) in char_name_map.iter() {
                     line = Line::default();
                     line.push_span(format!("{}", c));
                     line.push_span(format!(": {}", name).dim());

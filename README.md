@@ -53,8 +53,7 @@ I wanted to have a little project to start sharpening my new Rust skills on.  AN
 ## features
 -   calc
     -   bit ops: 16 bit, 32 bit
-    -   powers: x^x,
-    -   special: ln, log, invert fraction (reciprocal) (R), factorial
+    -   special: ln (N), log (G), invert fraction (reciprocal) (R), factorial (!)
     -   trigonometry
 - 	add color (if terminal capable and/or if flag)
 - 	check terminal size at startup for available space (exit gracefully if insufficient.)
