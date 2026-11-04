@@ -197,6 +197,11 @@ Work in integer (whole numbers) mode.
 
 Show (or hide) memory registers.
 
+## N
+Natural log     (N)
+
+Calculate the natural log of the current value.
+
 ## O
 Octal       (O)
 

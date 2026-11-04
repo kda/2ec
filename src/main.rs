@@ -546,6 +546,18 @@ const KEYS_MAPPING: LazyLock<HashMap<KeyCode, KeyEntry>> = LazyLock::new(|| {
                 ..Default::default()
             }
         ),
+        (KeyCode::Char('N'),
+            KeyEntry {
+                mode_op: HashMap::from([
+                    (Mode::Calculating, (|app| {
+                        app.calculator.set_pending_operation(Operation::NaturalLog);
+                        app.apply_equals();
+                    }) as KeyOperation),
+                ]),
+                help_heading: "N",
+                ..Default::default()
+            }
+        ),
         (KeyCode::Char('O'),
             KeyEntry {
                 mode_op: HashMap::from([
@@ -902,6 +914,7 @@ const OPERATION_NAMES: LazyLock<HashMap<Operation, &str>> = LazyLock::new(|| {
         (Operation::EToThePowerOf, "{"),
         (Operation::TenToThePowerOf, "}"),
         (Operation::YToThePowerOf, "Y"),
+        (Operation::NaturalLog, "N"),
     ])
 });
 
@@ -1442,12 +1455,17 @@ impl Widget for &App {
                 line = Line::default();
                 line.push_span("expo: ".dim());
                 line.spans.extend(self.highlight_letter_at("squ@re", 3).spans);
-                line.push_span(" ");
+                line.push_span("  ");
                 line.spans.extend(self.highlight_letter_at("{ e^x", 0).spans);
-                line.push_span(" ");
+                line.push_span("  ");
                 line.spans.extend(self.highlight_letter_at("} 10^x", 0).spans);
-                line.push_span(" ");
+                line.push_span("  ");
                 line.spans.extend(self.highlight_letter_at("Y^x", 0).spans);
+                text.push_line(line.left_aligned());
+
+                line = Line::default();
+                line.push_span(" log: ".dim());
+                line.spans.extend(self.highlight_letter_at("N ln", 0).spans);
                 text.push_line(line.left_aligned());
 
                 line = Line::default();
