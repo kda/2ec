@@ -182,6 +182,11 @@ Significant Figures     (F)
 
 Set the number of significant digits (0-9).
 
+## G
+Base 10 logarithm   (G)
+
+Calculate the base 10 logarathm (log) of the current value.
+
 ## H
 Hexadecimal (H)
 

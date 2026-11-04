@@ -511,6 +511,18 @@ const KEYS_MAPPING: LazyLock<HashMap<KeyCode, KeyEntry>> = LazyLock::new(|| {
                 ..Default::default()
             }
         ),
+        (KeyCode::Char('G'),
+            KeyEntry {
+                mode_op: HashMap::from([
+                    (Mode::Calculating, (|app| {
+                        app.calculator.set_pending_operation(Operation::Base10Log);
+                        app.apply_equals();
+                    }) as KeyOperation),
+                ]),
+                help_heading: "G",
+                ..Default::default()
+            }
+        ),
         (KeyCode::Char('H'),
             KeyEntry {
                 mode_op: HashMap::from([
@@ -915,6 +927,7 @@ const OPERATION_NAMES: LazyLock<HashMap<Operation, &str>> = LazyLock::new(|| {
         (Operation::TenToThePowerOf, "}"),
         (Operation::YToThePowerOf, "Y"),
         (Operation::NaturalLog, "N"),
+        (Operation::Base10Log, "G"),
     ])
 });
 
@@ -1466,6 +1479,8 @@ impl Widget for &App {
                 line = Line::default();
                 line.push_span(" log: ".dim());
                 line.spans.extend(self.highlight_letter_at("N ln", 0).spans);
+                line.push_span("  ");
+                line.spans.extend(self.highlight_letter_at("G log", 0).spans);
                 text.push_line(line.left_aligned());
 
                 line = Line::default();

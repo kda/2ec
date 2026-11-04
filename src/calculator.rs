@@ -24,6 +24,7 @@ pub enum Operation {
     TenToThePowerOf,
     YToThePowerOf,
     NaturalLog,
+    Base10Log,
 }
 
 #[derive(Clone, Copy, Debug, EnumIter, Eq, Hash, PartialEq)]
@@ -147,6 +148,7 @@ impl Calculator {
                         self.state.value = self.state.value.pow(value);
                     }
                     Operation::NaturalLog => {}
+                    Operation::Base10Log => {}
                 }
             } else {
                 self.state.value = value;
@@ -195,6 +197,16 @@ impl Calculator {
                     }
                     Operation::NaturalLog => {
                         match self.state.value.ln() {
+                            Ok(value) => self.state.value = value,
+                            Err(e) => {
+                                self.state.error = Some(e);
+                                self.state.pending_operation = None;
+                                return Err(e);
+                            }
+                        }
+                    }
+                    Operation::Base10Log => {
+                        match self.state.value.log10() {
                             Ok(value) => self.state.value = value,
                             Err(e) => {
                                 self.state.error = Some(e);
@@ -342,6 +354,24 @@ impl ValuePair {
             antilog = self.get_integer() as f64;
         }
         let log = antilog.ln();
+        if log.is_nan() {
+            return Err(Error::NotANumber);
+        }
+        if retval.numeric_mode == NumericMode::Integer {
+            retval.set_integer(log as i128);
+        } else {
+            retval.set_numeric_mode(NumericMode::Float);
+            retval.set_float(log);
+        }
+        Ok(retval)
+    }
+    pub fn log10(&self) -> Result<Self, Error> {
+        let mut retval = *self;
+        let mut antilog = self.get_float();
+        if retval.numeric_mode == NumericMode::Integer {
+            antilog = self.get_integer() as f64;
+        }
+        let log = antilog.log10();
         if log.is_nan() {
             return Err(Error::NotANumber);
         }
