@@ -1072,7 +1072,7 @@ impl App {
                 if let Some(ce) = self.constants.get(&key_event.code) {
                     let mut vp = calculator::ValuePair::default();
                     vp.set_numeric_mode(NumericMode::Float);
-                    vp.set_decimal(ce.value);
+                    vp.set_float(ce.value);
                     vp.set_numeric_mode(self.calculator.get_numeric_mode());
                     self.accumulator = self.format_value_pair(vp);
                     self.mode = Mode::Calculating;
@@ -1113,18 +1113,18 @@ impl App {
             NumericMode::Float => match self.calculator.state.get_numeric_base() {
                 // untested
                 NumericBase::Decimal => {
-                    format!("{:.1$}", value.get_decimal(), self.significant_digits).into()
+                    format!("{:.1$}", value.get_float(), self.significant_digits).into()
                 }
-                //NumericBase::Hexadecimal => format!("{}", value.get_decimal()).into(),
+                //NumericBase::Hexadecimal => format!("{}", value.get_float()).into(),
                 NumericBase::Hexadecimal => panic!("unimplemented"),
-                NumericBase::Octal => format!("{:o}", value.get_decimal().to_bits()).into(),
-                NumericBase::Binary => format!("{:b}", value.get_decimal().to_bits()).into(),
+                NumericBase::Octal => format!("{:o}", value.get_float().to_bits()).into(),
+                NumericBase::Binary => format!("{:b}", value.get_float().to_bits()).into(),
             }
             // untested
             NumericMode::Scientific => match self.calculator.state.get_numeric_base() {
                 // untested
                 NumericBase::Decimal => {
-                    let mut result: String = format!("{:.1$e}", value.get_decimal(), self.significant_digits).into();
+                    let mut result: String = format!("{:.1$e}", value.get_float(), self.significant_digits).into();
                     // force display of sign on exponent
                     // TODO: support uppercase 'E'
                     if let Some(pos) = result.find('e') {
@@ -1135,10 +1135,10 @@ impl App {
                     }
                     result
                 }
-                //NumericBase::Hexadecimal => format!("{}", value.get_decimal()).into(),
+                //NumericBase::Hexadecimal => format!("{}", value.get_float()).into(),
                 NumericBase::Hexadecimal => panic!("unimplemented"),
-                //NumericBase::Octal => format!("{:o}", value.get_decimal().to_bits()).into(),
-                //NumericBase::Binary => format!("{:b}", value.get_decimal().to_bits()).into(),
+                //NumericBase::Octal => format!("{:o}", value.get_float().to_bits()).into(),
+                //NumericBase::Binary => format!("{:b}", value.get_float().to_bits()).into(),
                 NumericBase::Octal => panic!("unimplemented"),
                 NumericBase::Binary => panic!("unimplemented"),
             }
@@ -1191,7 +1191,7 @@ impl App {
                 match self.calculator.state.get_numeric_base() {
                     NumericBase::Decimal => {
                         if let Ok(value) = self.accumulator.parse() {
-                            self.calculator.set_decimal_accumulator(value);
+                            self.calculator.set_float_accumulator(value);
                         }
                     }
                     _ => panic!("unimplemented"),
@@ -1201,7 +1201,7 @@ impl App {
                 match self.calculator.state.get_numeric_base() {
                     NumericBase::Decimal => {
                         if let Ok(value) = self.accumulator.parse() {
-                            self.calculator.set_decimal_accumulator(value);
+                            self.calculator.set_float_accumulator(value);
                         }
                     }
                     _ => panic!("unimplemented"),
@@ -1245,7 +1245,7 @@ impl App {
         if self.calculator.get_numeric_mode() == NumericMode::Integer {
             self.accumulator = self.memory_registers[index as usize].get_integer().to_string();
         } else {
-            self.accumulator = self.memory_registers[index as usize].get_decimal().to_string();
+            self.accumulator = self.memory_registers[index as usize].get_float().to_string();
         }
         self.parse_and_update_accumulator();
         self.mode = Mode::Calculating;

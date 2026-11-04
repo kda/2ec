@@ -70,13 +70,13 @@ impl Calculator {
             self.state.accumulator = Some(vp);
         }
     }
-    pub fn set_decimal_accumulator(&mut self, value: f64) {
+    pub fn set_float_accumulator(&mut self, value: f64) {
         if self.state.accumulator.is_some() {
-            self.state.accumulator.as_mut().unwrap().set_decimal(value);
+            self.state.accumulator.as_mut().unwrap().set_float(value);
         } else {
             let mut vp = ValuePair::default();
             vp.set_numeric_mode(self.state.value.get_numeric_mode());
-            vp.set_decimal(value);
+            vp.set_float(value);
             self.state.accumulator = Some(vp);
         }
     }
@@ -189,7 +189,7 @@ impl Calculator {
                             base.set_integer(10);
                         } else {
                             base.set_numeric_mode(NumericMode::Float);
-                            base.set_decimal(10.0);
+                            base.set_float(10.0);
                         }
                         self.state.value = base.pow(self.state.value);
                     }
@@ -234,7 +234,7 @@ impl Calculator {
 #[derive(Clone, Copy, Debug, Default)]
 pub struct ValuePair {
     integer: i128,
-    decimal: f64,
+    float: f64,
     numeric_mode: NumericMode,
 }
 
@@ -242,22 +242,22 @@ impl ValuePair {
     pub fn set_integer(&mut self, value: i128) {
         assert_eq!(self.numeric_mode, NumericMode::Integer);
         self.integer = value;
-        self.decimal = value as f64;
+        self.float = value as f64;
     }
-    pub fn set_decimal(&mut self, value: f64) {
+    pub fn set_float(&mut self, value: f64) {
         assert_ne!(self.numeric_mode, NumericMode::Integer);
-        self.decimal = value;
+        self.float = value;
         self.integer = value as i128;
     }
     fn clear(&mut self) {
         self.integer = 0;
-        self.decimal = 0.0;
+        self.float = 0.0;
     }
     pub fn get_integer(&self) -> i128 {
         self.integer
     }
-    pub fn get_decimal(&self) -> f64 {
-        self.decimal
+    pub fn get_float(&self) -> f64 {
+        self.float
     }
     pub fn set_numeric_mode(&mut self, numeric_mode: NumericMode) {
         if self.numeric_mode == numeric_mode {
@@ -265,10 +265,10 @@ impl ValuePair {
         }
         if self.numeric_mode == NumericMode::Integer {
             self.numeric_mode = numeric_mode;
-            self.set_decimal(self.integer as f64);
+            self.set_float(self.integer as f64);
         } else if numeric_mode == NumericMode::Integer {
             self.numeric_mode = numeric_mode;
-            self.set_integer(self.decimal as i128);
+            self.set_integer(self.float as i128);
         } else {
             self.numeric_mode = numeric_mode;
         }
@@ -278,7 +278,7 @@ impl ValuePair {
     }
     pub fn fract(&mut self) -> Self {
         if self.numeric_mode != NumericMode::Integer {
-            self.set_decimal(self.get_decimal().fract());
+            self.set_float(self.get_float().fract());
         }
         *self
     }
@@ -287,13 +287,13 @@ impl ValuePair {
         debug!("*self: {:?}", *self);
         debug!("retval: {:?}", retval);
         if retval.numeric_mode != NumericMode::Integer {
-            retval.set_decimal(self.get_decimal().trunc());
+            retval.set_float(self.get_float().trunc());
         }
         retval
     }
     pub fn sqrt(&self) -> Result<Self, Error> {
         let mut retval = *self;
-        let mut square = self.get_decimal();
+        let mut square = self.get_float();
         if retval.numeric_mode == NumericMode::Integer {
             square = self.get_integer() as f64;
         }
@@ -305,7 +305,7 @@ impl ValuePair {
             retval.set_integer(root as i128);
         } else {
             retval.set_numeric_mode(NumericMode::Float);
-            retval.set_decimal(root);
+            retval.set_float(root);
         }
         Ok(retval)
     }
@@ -317,8 +317,8 @@ impl ValuePair {
             retval.set_integer(result as i128);
         } else {
             retval.set_numeric_mode(NumericMode::Float);
-            let result = self.decimal.exp();
-            retval.set_decimal(result);
+            let result = self.float.exp();
+            retval.set_float(result);
         }
         retval
     }
@@ -330,14 +330,14 @@ impl ValuePair {
             retval.set_integer(result as i128);
         } else {
             retval.set_numeric_mode(NumericMode::Float);
-            let result = self.decimal.powf(other.decimal);
-            retval.set_decimal(result);
+            let result = self.float.powf(other.float);
+            retval.set_float(result);
         }
         retval
     }
     pub fn ln(&self) -> Result<Self, Error> {
         let mut retval = *self;
-        let mut antilog = self.get_decimal();
+        let mut antilog = self.get_float();
         if retval.numeric_mode == NumericMode::Integer {
             antilog = self.get_integer() as f64;
         }
@@ -349,7 +349,7 @@ impl ValuePair {
             retval.set_integer(log as i128);
         } else {
             retval.set_numeric_mode(NumericMode::Float);
-            retval.set_decimal(log);
+            retval.set_float(log);
         }
         Ok(retval)
     }
@@ -361,7 +361,7 @@ impl AddAssign<ValuePair> for ValuePair {
         if self.numeric_mode == NumericMode::Integer {
             self.set_integer(self.integer + other.integer);
         } else {
-            self.set_decimal(self.decimal + other.decimal);
+            self.set_float(self.float + other.float);
         }
     }
 }
@@ -372,7 +372,7 @@ impl SubAssign<ValuePair> for ValuePair {
         if self.numeric_mode == NumericMode::Integer {
             self.set_integer(self.integer - other.integer);
         } else {
-            self.set_decimal(self.decimal - other.decimal);
+            self.set_float(self.float - other.float);
         }
     }
 }
@@ -383,7 +383,7 @@ impl MulAssign<ValuePair> for ValuePair {
         if self.numeric_mode == NumericMode::Integer {
             self.set_integer(self.integer * other.integer);
         } else {
-            self.set_decimal(self.decimal * other.decimal);
+            self.set_float(self.float * other.float);
         }
     }
 }
@@ -394,7 +394,7 @@ impl DivAssign<ValuePair> for ValuePair {
         if self.numeric_mode == NumericMode::Integer {
             self.set_integer(self.integer / other.integer);
         } else {
-            self.set_decimal(self.decimal / other.decimal);
+            self.set_float(self.float / other.float);
         }
     }
 }
@@ -405,7 +405,7 @@ impl RemAssign<ValuePair> for ValuePair {
         if self.numeric_mode == NumericMode::Integer {
             self.set_integer(self.integer % other.integer);
         } else {
-            self.set_decimal(self.decimal % other.decimal);
+            self.set_float(self.float % other.float);
         }
     }
 }
