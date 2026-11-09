@@ -594,6 +594,18 @@ const KEYS_MAPPING: LazyLock<HashMap<KeyCode, KeyEntry>> = LazyLock::new(|| {
                 ..Default::default()
             }
         ),
+        (KeyCode::Char('R'),
+            KeyEntry {
+                mode_op: HashMap::from([
+                    (Mode::Calculating, (|app| {
+                        app.calculator.set_pending_operation(Operation::Reciprocal);
+                        app.apply_equals();
+                    }) as KeyOperation),
+                ]),
+                help_heading: "R",
+                ..Default::default()
+            }
+        ),
         (KeyCode::Char('S'),
             KeyEntry {
                 mode_op: HashMap::from([
@@ -928,6 +940,7 @@ const OPERATION_NAMES: LazyLock<HashMap<Operation, &str>> = LazyLock::new(|| {
         (Operation::YToThePowerOf, "Y"),
         (Operation::NaturalLog, "N"),
         (Operation::Base10Log, "G"),
+        (Operation::Reciprocal, "R"),
     ])
 });
 
@@ -1477,6 +1490,12 @@ impl Widget for &App {
                 text.push_line(line.left_aligned());
 
                 line = Line::default();
+                line.push_span("root: ".dim());
+                line.spans.extend(self.highlight_letter_at("sQrt", 1).spans);
+                line.push_span(" ");
+                text.push_line(line.left_aligned());
+
+                line = Line::default();
                 line.push_span(" log: ".dim());
                 line.spans.extend(self.highlight_letter_at("N ln", 0).spans);
                 line.push_span("  ");
@@ -1484,9 +1503,8 @@ impl Widget for &App {
                 text.push_line(line.left_aligned());
 
                 line = Line::default();
-                line.push_span("root: ".dim());
-                line.spans.extend(self.highlight_letter_at("sQrt", 1).spans);
-                line.push_span(" ");
+                line.push_span("spec: ".dim());
+                line.spans.extend(self.highlight_letter_at("Reciprocal", 0).spans);
                 text.push_line(line.left_aligned());
 
                 // memory

@@ -217,6 +217,11 @@ Square root (Q)
 
 Calculate the square root of the current value.
 
+## R
+Reciprocal  (R)
+
+Calculate the reciprocal (1/x) of the current value.
+
 ## S
 Scientific  (S)
 

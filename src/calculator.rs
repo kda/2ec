@@ -25,6 +25,7 @@ pub enum Operation {
     YToThePowerOf,
     NaturalLog,
     Base10Log,
+    Reciprocal,
 }
 
 #[derive(Clone, Copy, Debug, EnumIter, Eq, Hash, PartialEq)]
@@ -149,6 +150,7 @@ impl Calculator {
                     }
                     Operation::NaturalLog => {}
                     Operation::Base10Log => {}
+                    Operation::Reciprocal => {}
                 }
             } else {
                 self.state.value = value;
@@ -214,6 +216,9 @@ impl Calculator {
                                 return Err(e);
                             }
                         }
+                    }
+                    Operation::Reciprocal => {
+                        self.state.value = self.state.value.recip()
                     }
                     _ => {}
                 }
@@ -382,6 +387,21 @@ impl ValuePair {
             retval.set_float(log);
         }
         Ok(retval)
+    }
+    pub fn recip(&self) -> Self {
+        let mut retval = *self;
+        let mut base = self.get_float();
+        if retval.numeric_mode == NumericMode::Integer {
+            base = self.get_integer() as f64;
+        }
+        let reciprocal = base.recip();
+        if retval.numeric_mode == NumericMode::Integer {
+            retval.set_integer(0);
+        } else {
+            retval.set_numeric_mode(NumericMode::Float);
+            retval.set_float(reciprocal);
+        }
+        retval
     }
 }
 
