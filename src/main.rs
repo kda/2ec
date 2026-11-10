@@ -50,7 +50,7 @@ struct KeyEntry<'a> {
 }
 
 // in order for the future
-//  [ESC]  ! " # $ [% &] ' ( ) , [- . /] [0-9] : ; [< = >] [?] [@] [A-Z] [ \ [^] _ ` [a-z] [{ | }] [~] DEL
+//  [ESC  !] " [#] $ [% &] ' ( ) , [- . /] [0-9] : ; [< = >] [?] [@] [A-Z] [ \ [^] _ ` [a-z] [{ | }] [~] DEL
 
 const KEYS_MAPPING: LazyLock<HashMap<KeyCode, KeyEntry>> = LazyLock::new(|| {
     HashMap::from([
@@ -101,6 +101,18 @@ const KEYS_MAPPING: LazyLock<HashMap<KeyCode, KeyEntry>> = LazyLock::new(|| {
                 ]),
                 help_heading: "escape",
                 name: Some("esc".to_string()),
+                ..Default::default()
+            }
+        ),
+        (KeyCode::Char('!'),
+            KeyEntry {
+                mode_op: HashMap::from([
+                     (Mode::Calculating, (|app| {
+                        app.calculator.set_pending_operation(Operation::Factorial);
+                        app.apply_equals();
+                     }) as KeyOperation),
+                ]),
+                help_heading: "factorial",
                 ..Default::default()
             }
         ),
@@ -941,6 +953,7 @@ const OPERATION_NAMES: LazyLock<HashMap<Operation, &str>> = LazyLock::new(|| {
         (Operation::NaturalLog, "N"),
         (Operation::Base10Log, "G"),
         (Operation::Reciprocal, "R"),
+        (Operation::Factorial, "!"),
     ])
 });
 
@@ -948,6 +961,7 @@ const ERROR_NAMES: LazyLock<HashMap<Error, &str>> = LazyLock::new(|| {
     HashMap::from([
         (Error::DivideByZero, "divide by zero"),
         (Error::NotANumber, "not a number"),
+        (Error::Overflow, "infinite"),
     ])
 });
 
@@ -1505,6 +1519,8 @@ impl Widget for &App {
                 line = Line::default();
                 line.push_span("spec: ".dim());
                 line.spans.extend(self.highlight_letter_at("Reciprocal", 0).spans);
+                line.push_span("  ");
+                line.spans.extend(self.highlight_letter_at("! factorial", 0).spans);
                 text.push_line(line.left_aligned());
 
                 // memory
@@ -1942,6 +1958,44 @@ mod tests {
     fn check_error_notanumber() {
         let mut ta = TestApp::new();
         ta.handle_string("45=CQ");
+        ta.render();
+        assert_snapshot!(ta.backend());
+        ta.handle_key('q');
+        ta.render();
+        assert_snapshot!(ta.backend());
+    }
+
+    #[test]
+    fn check_factorial_integer_error() {
+        let mut ta = TestApp::new();
+        ta.handle_string("-1=!");
+        ta.render();
+        assert_snapshot!(ta.backend());
+        ta.handle_key('q');
+        ta.render();
+        assert_snapshot!(ta.backend());
+
+        ta.handle_key_code(KeyCode::Esc);
+        ta.handle_string("34=!");
+        ta.render();
+        assert_snapshot!(ta.backend());
+        ta.handle_key('q');
+        ta.render();
+        assert_snapshot!(ta.backend());
+    }
+
+    #[test]
+    fn check_factorial_float_error() {
+        let mut ta = TestApp::new();
+        ta.handle_string("A-2.1=!");
+        ta.render();
+        assert_snapshot!(ta.backend());
+        ta.handle_key('q');
+        ta.render();
+        assert_snapshot!(ta.backend());
+
+        ta.handle_key_code(KeyCode::Esc);
+        ta.handle_string("172.3=!");
         ta.render();
         assert_snapshot!(ta.backend());
         ta.handle_key('q');

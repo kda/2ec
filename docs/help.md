@@ -31,6 +31,12 @@ It can also be used to stop:
 -   picking the register to recall from
 -   viewing the current help text
 
+## factorial
+Factorial   (!)
+
+Calculates the factorial of the current value.
+
+For floats (or scientific), uses Gamma function to estimate.
 ## pound
 Constants   (#)
 

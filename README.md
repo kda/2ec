@@ -53,8 +53,9 @@ I wanted to have a little project to start sharpening my new Rust skills on.  AN
 ## features
 -   calc
     -   bit ops: 16 bit, 32 bit
-    -   special: factorial (!)
     -   trigonometry
+-   handle overflow: detect and report (multiplication, addition, powers)
+-   handle underflow (diminishing to zero): detect and report (subtraction)
 - 	add color (if terminal capable and/or if flag)
 - 	check terminal size at startup for available space (exit gracefully if insufficient.)
 -   display commas (modal, also consider EURO style (.  <-> ,)) (possibly detect based on locale?)
@@ -113,6 +114,8 @@ I wanted to have a little project to start sharpening my new Rust skills on.  AN
 -   Insta Review
     -   `cargo install cargo-insta`
     -   `cargo insta review`
-    -   `INSTA_UPDATE=always cargo test`
+    -   `INSTA_UPDATE=always cargo test generate_demo`
 -   Install
     -   `cargo install --path .`
+- how to examine `.snap` files with `less`
+    -   `LESSOPEN= less <filename.snap>`

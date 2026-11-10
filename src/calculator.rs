@@ -26,12 +26,14 @@ pub enum Operation {
     NaturalLog,
     Base10Log,
     Reciprocal,
+    Factorial,
 }
 
 #[derive(Clone, Copy, Debug, EnumIter, Eq, Hash, PartialEq)]
 pub enum Error {
     DivideByZero,
     NotANumber,
+    Overflow,
 }
 
 #[derive(Copy, Clone, Debug, Default, EnumIter, Eq, PartialEq, Hash, Ord, PartialOrd, ValueEnum, serde::Deserialize)]
@@ -151,6 +153,7 @@ impl Calculator {
                     Operation::NaturalLog => {}
                     Operation::Base10Log => {}
                     Operation::Reciprocal => {}
+                    Operation::Factorial => {}
                 }
             } else {
                 self.state.value = value;
@@ -219,6 +222,16 @@ impl Calculator {
                     }
                     Operation::Reciprocal => {
                         self.state.value = self.state.value.recip()
+                    }
+                    Operation::Factorial => {
+                        match self.state.value.factorial() {
+                            Ok(value) => self.state.value = value,
+                            Err(e) => {
+                                self.state.error = Some(e);
+                                self.state.pending_operation = None;
+                                return Err(e);
+                            }
+                        }
                     }
                     _ => {}
                 }
@@ -402,6 +415,32 @@ impl ValuePair {
             retval.set_float(reciprocal);
         }
         retval
+    }
+    pub fn factorial(&self) -> Result<Self, Error> {
+        let mut retval = *self;
+        if retval.numeric_mode == NumericMode::Integer {
+            if self.get_integer() < 0 {
+                return Err(Error::NotANumber)
+            }
+            let mut value = 1_i128;
+            for i in 1..=self.get_integer() {
+                value = match value.checked_mul(i) {
+                    Some(result) => result,
+                    None => return Err(Error::Overflow),
+                }
+            }
+            retval.set_integer(value);
+        } else {
+            if self.get_float() < 0.0 {
+                return Err(Error::NotANumber)
+            }
+            let value = libm::tgamma(self.get_float() + 1.0);
+            if value.is_infinite() {
+                return Err(Error::Overflow)
+            }
+            retval.set_float(value);
+        }
+        Ok(retval)
     }
 }
 

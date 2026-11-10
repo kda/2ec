@@ -1642,6 +1642,7 @@ dependencies = [
  "clap",
  "crossterm",
  "insta",
+ "libm",
  "log",
  "pulldown-cmark",
  "ratatui",

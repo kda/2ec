@@ -13,7 +13,7 @@ expression: ta.backend()
 "│expo: squ@re  { e^x  } 10^x  Y^x │     "
 "│root: sQrt                       │     "
 "│ log: N ln  G log                │     "
-"│spec: Reciprocal                 │     "
+"│spec: Reciprocal  ! factorial    │     "
 "│ mem: store recall               │     "
 "│base: Hex Oct Bin                │     "
 "│mode: floAt Sci                  │     "
