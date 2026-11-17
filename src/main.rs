@@ -1003,21 +1003,30 @@ struct App {
     constants: HashMap<KeyCode, ConstantEntry>,
 }
 
+fn build_config_help() -> String {
+    format!("configuration file location.  If not specified, then attempts: {:?} and {:?}",
+        config::Config::get_local_filename().expect("unable to determine CWD"),
+        config::Config::get_home_filename().expect("unable to determine HOME")
+    )
+}
+
 #[derive(Parser, Debug)]
 #[command(author, version, about, long_about = None, name = "2ec")]
 struct Args {
     /// numeric base: default: decimal (base-10)
     #[arg(short, long, value_enum)]
     base: Option<NumericBase>,
-    #[arg(short, long)]
+    #[arg(short, long, value_name="FILE", help=build_config_help())]
     config: Option<String>,
-    #[arg(short, long)]
+    #[arg(short, long, help="send debug messages to the debug log")]
     debug: bool,
     #[arg(short, long, default_value="2ec_debug.log")]
     logfile: String,
     /// numeric mode: default: integer
     #[arg(short, long, value_enum)]
     mode: Option<NumericMode>,
+    #[arg(short, long, help="show the memory registars when launched")]
+    show_memory_registers: bool,
 }
 
 impl App {
@@ -1042,7 +1051,7 @@ impl App {
             size: Size::default(),
             calculator: Calculator::new(),
             accumulator: String::new(),
-            memory_registers_visible: false,
+            memory_registers_visible: args.show_memory_registers,
             memory_registers: [calculator::ValuePair::default(); NUMBER_OF_REGISTERS],
             significant_digits: 2,
             help_content: String::new(),
@@ -1067,6 +1076,10 @@ impl App {
             if let Some(base) = instance.config.base {
                 instance.set_numeric_base(base);
             }
+        }
+
+        if let Some(show_memory_registers) = instance.config.show_memory_registers {
+            instance.memory_registers_visible = show_memory_registers;
         }
 
         instance
@@ -1937,6 +1950,38 @@ mod tests {
             "2ec".into(),
             "--base".into(),
             "octal".into(),
+        ];
+        let mut ta = TestApp::new_with_args(args);
+        ta.render();
+        assert_snapshot!(ta.backend());
+    }
+
+    #[test]
+    fn visible_memory_registers_from_config() -> std::io::Result<()> {
+        // Prep the config
+        let config_content = r#"
+            show_memory_registers: true
+        "#;
+        let mut file = NamedTempFile::new()?;
+        writeln!(file, "{}", config_content)?;
+
+        let args = vec![
+            "2ec".into(),
+            "--config".into(),
+            file.path().as_os_str().to_os_string(),
+        ];
+        let mut ta = TestApp::new_with_args(args);
+        ta.render();
+        assert_snapshot!(ta.backend());
+
+        Ok(())
+    }
+
+    #[test]
+    fn visible_memory_registers_from_cli() {
+        let args = vec![
+            "2ec".into(),
+            "--show-memory-registers".into(),
         ];
         let mut ta = TestApp::new_with_args(args);
         ta.render();

@@ -9,7 +9,7 @@ A text-oriented calculator for the terminal.
 
 # Features (completed and functioning)
 -   Support for different bases: 2, 8, 10, 16
--   Support for different numeric mdoes: whole number (integer, no decimals), decimal (3.14), scientific (2.03e+4)
+-   Support for different numeric mdoes: whole number (integer, no decimals), float (3.14), scientific (2.03e+4)
 -   Basic math operations: add, subtract, multiply, divide, remainder (modulo)
 -   Bit operations: AND, OR, XOR, XNOR, invert, left/right shift
 -   10 memory locations, to recall the results of previous calculations.
@@ -97,7 +97,6 @@ I wanted to have a little project to start sharpening my new Rust skills on.  AN
 -   number of significant digits
 -   color mode
 -   display commas (modal, also consider EURO style (.  <-> ,))
--   display memory registers
 -   confirm quit request
 ## docs
 -   configuration file with examples

@@ -1,9 +1,10 @@
 use serde::Deserialize;
 use std::collections::HashMap;
-use std::fs::File;
-use std::io::BufReader;
-use std::io::BufRead;
 use std::env;
+use std::fs::File;
+use std::io::BufRead;
+use std::io::BufReader;
+use std::path::PathBuf;
 
 use crate::calculator::NumericBase;
 use crate::calculator::NumericMode;
@@ -20,6 +21,7 @@ pub struct Config {
     pub constants: Option<HashMap<String, Constant>>,
     pub mode: Option<NumericMode>,
     pub base: Option<NumericBase>,
+    pub show_memory_registers: Option<bool>
 }
 
 impl Config {
@@ -50,18 +52,33 @@ impl Config {
 
     const DEFAULT_FILENAME: &str = ".2ec.yaml";
 
-    fn find_file() -> Option<String> {
-        // First: find it in the current working directory
+    pub fn get_local_filename() -> Option<PathBuf> {
         if let Ok(mut cwd) = env::current_dir() {
             cwd.push(Self::DEFAULT_FILENAME);
+            return Some(cwd)
+        }
+        None
+    }
+
+    pub fn get_home_filename() -> Option<PathBuf> {
+        if let Some(mut home) = env::home_dir() {
+            home.push(Self::DEFAULT_FILENAME);
+            return Some(home)
+        }
+        None
+    }
+
+    fn find_file() -> Option<String> {
+        // First: find it in the current working directory
+        //  - mostly used for testing, but could be useful for specialized projects
+        if let Some(cwd) = Self::get_local_filename() {
             if cwd.is_file() {
                 return cwd.into_os_string().into_string().ok();
             }
         }
 
         // Second: find it in home directory
-        if let Some(mut home) = env::home_dir() {
-            home.push(Self::DEFAULT_FILENAME);
+        if let Some(home) = Self::get_home_filename() {
             if home.is_file() {
                 return home.into_os_string().into_string().ok();
             }
