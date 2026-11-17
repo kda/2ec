@@ -1752,7 +1752,7 @@ mod tests {
         {
             TestApp{
                 app: App::new(args),
-                terminal: Terminal::new(TestBackend::new(40, 26)).unwrap(),
+                terminal: Terminal::new(TestBackend::new(55, 26)).unwrap(),
             }
         }
         fn new_large() -> Self {
