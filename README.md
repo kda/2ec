@@ -86,11 +86,10 @@ I wanted to have a little project to start sharpening my new Rust skills on.  AN
 -   moving from Integer to Decimal mode, patches 2 zeros on accumulator
     -   should change nothing, only the mode (behind the scenes)
     -   does the opposite (Decimal to Integer), remove value to the right of the decimal?
--   demo animation is broken for constants
 ## command line
 -   confirm quit request
 ## preferences (also, all available via command line)
--   retain values of storage registers between runs
+-   retain values of memory registers between runs
 -   support upper case hex display
 -   support upper case e in scientific display (maybe same as hex UPPER)
 -   clear screen (before, after)

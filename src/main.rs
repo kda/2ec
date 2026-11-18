@@ -19,6 +19,7 @@ use strum_macros::EnumIter;
 mod calculator;
 mod config;
 mod help_content;
+mod memory_registers;
 
 use calculator::Calculator;
 use calculator::NumericBase;
@@ -993,6 +994,7 @@ struct App {
     accumulator: String,
     memory_registers_visible: bool,
     memory_registers: [calculator::ValuePair; NUMBER_OF_REGISTERS],
+    preserve_memory_registers: bool,
 
     // Display oriented values
     significant_digits: usize,
@@ -1010,6 +1012,16 @@ fn build_config_help() -> String {
     )
 }
 
+fn build_memory_register_storage_help() -> String {
+    format!("location where memory registers are stored and loaded from\n\
+        (but only if --preserver_memory_registers is set)\n\
+        - If not specified, and no configuration file detected: local or home\n\
+        - If not specified, then beside config file (either specified or default detected): (cuurently) from config location\n\
+        - If specified, then use that location\n\
+        "
+    )
+}
+
 #[derive(Parser, Debug)]
 #[command(author, version, about, long_about = None, name = "2ec")]
 struct Args {
@@ -1020,13 +1032,17 @@ struct Args {
     config: Option<String>,
     #[arg(short, long, help="send debug messages to the debug log")]
     debug: bool,
-    #[arg(short, long, default_value="2ec_debug.log")]
+    #[arg(short, long, value_name="FILE", default_value="2ec_debug.log")]
     logfile: String,
     /// numeric mode: default: integer
     #[arg(short, long, value_enum)]
     mode: Option<NumericMode>,
     #[arg(short, long, help="show the memory registars when launched")]
     show_memory_registers: bool,
+    #[arg(short, long, help="preserve the memory registers between runs.  both writing them on exit and loading them when starting")]
+    preserve_memory_registers: bool,
+    #[arg(visible_alias = "mrs", long, value_name="FILE", help=build_memory_register_storage_help())]
+    memory_register_storage: Option<String>,
 }
 
 impl App {
@@ -1053,6 +1069,7 @@ impl App {
             accumulator: String::new(),
             memory_registers_visible: args.show_memory_registers,
             memory_registers: [calculator::ValuePair::default(); NUMBER_OF_REGISTERS],
+            preserve_memory_registers: args.preserve_memory_registers,
             significant_digits: 2,
             help_content: String::new(),
             // args: args,
@@ -1082,6 +1099,14 @@ impl App {
             instance.memory_registers_visible = show_memory_registers;
         }
 
+        if ! instance.preserve_memory_registers {
+            if let Some(true) = instance.config.preserve_memory_registers {
+                instance.preserve_memory_registers = true;
+            }
+        }
+        if instance.preserve_memory_registers {
+        }
+
         instance
     }
 
@@ -1092,6 +1117,8 @@ impl App {
         while !self.exit_requested {
             terminal.draw(|frame| self.draw(frame))?;
             self.handle_events()?;
+        }
+        if self.preserve_memory_registers {
         }
         Ok(())
     }

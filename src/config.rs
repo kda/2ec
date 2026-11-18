@@ -21,7 +21,8 @@ pub struct Config {
     pub constants: Option<HashMap<String, Constant>>,
     pub mode: Option<NumericMode>,
     pub base: Option<NumericBase>,
-    pub show_memory_registers: Option<bool>
+    pub show_memory_registers: Option<bool>,
+    pub preserve_memory_registers: Option<bool>,
 }
 
 impl Config {
@@ -68,9 +69,8 @@ impl Config {
         None
     }
 
-    fn find_file() -> Option<String> {
+    pub fn find_file() -> Option<String> {
         // First: find it in the current working directory
-        //  - mostly used for testing, but could be useful for specialized projects
         if let Some(cwd) = Self::get_local_filename() {
             if cwd.is_file() {
                 return cwd.into_os_string().into_string().ok();
@@ -93,7 +93,7 @@ mod tests {
     use super::*;
 		use std::fs;
 
-    // Fails when there is config present (which will happen)
+    // Fails when there is no config present (which will happen)
     #[test]
     #[ignore]
     fn test_find_file_nonexistent() {
@@ -169,4 +169,6 @@ mod tests {
         assert!(ce.value == 0.621);
         assert!(constants.contains_key("test"));
     }
+
+    // TODO: add tests for other values that can be found in config
 }
